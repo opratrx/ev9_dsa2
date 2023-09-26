@@ -227,7 +227,6 @@ truckDeliverPackages(truck2, 2)
 truckDeliverPackages(truck3, 3)
 
 print("\nDelivery complete for all trucks!\n")
-# TODO: Display all metrics, such as total distance traveled by each truck, total time spent, etc.
 print(log_truck_metrics_with_date(truck1, 1))
 print(log_truck_metrics_with_date(truck2, 2))
 print(log_truck_metrics_with_date(truck3, 3))
