@@ -7,15 +7,15 @@ Your task is to write code that determines and presents a solution delivering al
 
 The supervisor (user) needs the means to check the status of any given package at any given time using package IDs. The report should also include the **delivery times**, **which packages are at the hub**, and **en route**. The intent is to use this program for this specific location and use the same program in different cities as WGUPS expands its business. As such, you will need to include detailed comments following the industry-standards to make your code easy to read and justifying the decisions you made while writingyour program.
 
-### Progress & Updates
+## Progress & Updates
 
-===
+---
 
 **9/26/23 - Initial Commit**
 
-Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a basic layout and foundational draft.
+>Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a >basic layout and foundational draft.
 
 ---
 **9/28/23 - Implemented a Working User Interface**
 
-Implemented a working user interface and will be incorporating a better design in the next few updates. For the time being, this will serve as the first draft of the user interface.
+>Implemented a working user interface and will be incorporating a better design in the next few updates. For the time being, this will serve as the first draft of the user interface.
