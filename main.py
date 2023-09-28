@@ -18,8 +18,8 @@ def log_truck_metrics_with_date(truck, truck_num):
 
     # Create a formatted string with the truck metrics
     metrics_str = (
-        f"\nTruck #{truck_num} metrics:\n"
-        "———————————————————————————————————————————————\n"
+        f"\n\x1b[1;31m\033[38;2;243;134;48mTruck #{truck_num} metrics:\n"
+        "———————————————————————————————————————————————\n\033[0m"
         f"Departure Time: {departure_time_str}\n"
         f"Return Time: {return_time_str}\n"
         f"Drive Time: {drive_time:.2f} hours\n"
@@ -82,7 +82,10 @@ class Packages:
         self.status = status
 
     def __str__(self):
-        return "Package ID | Address                                   | City             | Zip Code | Weight | Status"
+        return (
+                    "\n\n\n\x1b[1;31m\033[38;2;243;134;48mID:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mAddress:\033[0m %-20s \t \x1b[1;31m\033[38;2;243;134;48mCity:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mState:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mZip:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mDeadline:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mWeight:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mStatus:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mDeparture Time:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mDelivery Time:\033[0m %s" %
+                    (self.ID, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status,
+                     self.departureTime, self.deliveryTime))
 
     def statusUpdate(self, timeChange):
         if self.deliveryTime is None:
@@ -161,13 +164,10 @@ def Betweenst(addy1, addy2):
     return float(distance)
 
 
-# Create a global list to hold our delivery logs
-delivery_logs = []
-
-
-# Update truckDeliverPackages to append to the delivery_logs instead of print
 def truckDeliverPackages(truck, truck_num):
     enroute = []
+    status_logs = []
+
     for packageID in truck.packages:
         package = packageHash.search(packageID)
         enroute.append(package)
@@ -186,9 +186,9 @@ def truckDeliverPackages(truck, truck_num):
 
         # Indicates when the truck has stopped at the delivery location.
         statusStops = (
-            f"  \x1b[1;37m[Truck #{truck_num}]    \x1b[1;31m✘\tstopped\t\t\t[{truck.time}]\t\t\t{truck.miles:.1f} miles driven.   \033[34;2m\t{nextPackage.street},"
+            f"  \x1b[1;31m\033[38;2;243;134;48m[Truck #{truck_num}]    \x1b[1;31m✘\tstopped\t\t\t[{truck.time}]\t\t\t{truck.miles:.1f} miles driven.   \033[34;2m\t{nextPackage.street},"
             f" {nextPackage.city}, {nextPackage.state}, {nextPackage.zip}\033[0m")
-        print(statusStops)
+        status_logs.append(statusStops)
 
         truck.packages.append(nextPackage.ID)
         enroute.remove(nextPackage)
@@ -199,8 +199,8 @@ def truckDeliverPackages(truck, truck_num):
         nextPackage.departureTime = truck.departTime
 
         # Indicates that the package has been delivered
-        statusDelivered = f"  \x1b[1;37m[Truck #{truck_num}]    \033[32;2m✔︎\tdelivered\t\t[{truck.time}]   \033[34;2m\t\t\t\t\t\t\t\tPackage {nextPackage.ID}.\033[0m"
-        print(statusDelivered)
+        statusDelivered = f"  \x1b[1;31m\033[38;2;243;134;48m[Truck #{truck_num}]    \033[32;2m✔︎\tdelivered\t\t[{truck.time}]   \t\t\t\t\t\t\t\tPackage {nextPackage.ID}.\033[0m"
+        status_logs.append(statusDelivered)
 
     return_distance = Betweenst(addresss(truck.currentLocation), addresss("4001 South 700 East"))
     truck.miles += return_distance
@@ -208,44 +208,105 @@ def truckDeliverPackages(truck, truck_num):
 
     # Indicates when the truck has arrived at the hub
     statusHub = f"  \x1b[1;31m\033[38;2;243;134;48m[Truck #{truck_num}]    ⬆︎\treturn\t\t\t[{truck.time}]\t\t\t{truck.miles:.1f} miles driven.   \t4001 South 700 East (hub)\033[0m"
-    print(statusHub)
+    status_logs.append(statusHub)
+    return status_logs
 
 
-truck1 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),
-                            [1, 29, 7, 30, 8, 34, 40, 13, 39, 14, 15, 16, 19, 20, 37])
-truck2 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=11),
-                            [6, 5, 21, 4, 24, 23, 26, 22, 10, 11, 31])
-truck3 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=9, minutes=5),
-                            [17, 12, 25, 28, 32, 3, 18, 36, 38, 27, 35, 2, 33, 9])
+'''
+************************************************************************************************
+                                     USER INTERFACE SECTION
+                            UI / UX Design and Program Initialization
+************************************************************************************************
+'''
 
 
-print("⎢ Truck #    ⎢ Status           ⎢ Time              ⎢ Miles                 ⎢ Address or Package #")
-print("——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————")
-truckDeliverPackages(truck1, 1)
-truck2.departTime = min(truck1.time, truck3.time)
-truckDeliverPackages(truck2, 2)
-truckDeliverPackages(truck3, 3)
+def main():
+    # Print Title
+    print("\n\n\n\x1b[1;31m\033[38;2;243;134;48mWestern Governors University Parcel Service\033[0m")
 
-print("\nDelivery complete for all trucks!\n")
-print(log_truck_metrics_with_date(truck1, 1))
-print(log_truck_metrics_with_date(truck2, 2))
-print(log_truck_metrics_with_date(truck3, 3))
+    # Initialize truck objects (truck1, truck2, truck3) here
+    truck1 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),
+                    [1, 29, 7, 30, 8, 34, 40, 13, 39, 14, 15, 16, 19, 20, 37])
+    truck2 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=11),
+                    [6, 5, 21, 4, 24, 23, 26, 22, 10, 11, 31])
+    truck3 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=9, minutes=5),
+                    [17, 12, 25, 28, 32, 3, 18, 36, 38, 27, 35, 2, 33, 9])
 
-# Calculate the corrected total time in hours
-total_time_corrected = (
-    (truck1.time.total_seconds() - truck1.departTime.total_seconds())
-    + (truck2.time.total_seconds() - truck2.departTime.total_seconds())
-    + (truck3.time.total_seconds() - truck3.departTime.total_seconds())
-) / 3600  # Convert total seconds to hours
+    # Initialize status logs for each truck
+    status_logs_truck1 = truckDeliverPackages(truck1, 1)
+    truck2.departTime = min(truck1.time, truck3.time)
+    status_logs_truck2 = truckDeliverPackages(truck2, 2)
+    status_logs_truck3 = truckDeliverPackages(truck3, 3)
 
-# Calculate the total distance and total packages delivered
-total_distance = truck1.miles + truck2.miles + truck3.miles
-total_packages_delivered = len(truck1.packages) + len(truck2.packages) + len(truck3.packages)
+    # Display overall miles for all the trucks
+    print("The overall miles are:", (truck1.miles + truck2.miles + truck3.miles))
+
+    # Main program loop
+    while True:
+        # Display the menu to the user and get the user's choice
+        user_choice = input(
+            "\n\n\n\x1b[1;31m\033[38;2;243;134;48mWhat would you like to do?\033[0m\n\td - Begin Delivery Simulation\n\tl - Lookup Package Status\n\tq - Quit\n> ")
+
+        # If the user chooses to quit, exit the program
+        if user_choice.lower() == 'q':
+            break
+
+        # If the user chooses to begin the delivery simulation
+        elif user_choice.lower() == 'd':
+            print("\n\n\nBeginning delivery simulation...\n\n\n")
+
+            # Print table header for the simulation
+            print("⎢ Truck #    ⎢ Status           ⎢ Time              ⎢ Miles                 ⎢ Address or Package #")
+            print(
+                "——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————")
+
+            # Print Delivery Logs (statusStops, statusDelivered, statusHub)
+            # Assuming truck1, truck2, and truck3 are the truck objects
+            print("\n".join(status_logs_truck1))
+            print("\n".join(status_logs_truck2))
+            print("\n".join(status_logs_truck3))
+
+            print("\n\x1b[1;31m\033[38;2;243;134;48mDelivery complete for all trucks!\033[0m\n")
+            print(log_truck_metrics_with_date(truck1, 1))
+            print(log_truck_metrics_with_date(truck2, 2))
+            print(log_truck_metrics_with_date(truck3, 3))
+
+            # Calculate the corrected total time in hours
+            total_time_corrected = (
+                                           (truck1.time.total_seconds() - truck1.departTime.total_seconds())
+                                           + (truck2.time.total_seconds() - truck2.departTime.total_seconds())
+                                           + (truck3.time.total_seconds() - truck3.departTime.total_seconds())
+                                   ) / 3600  # Convert total seconds to hours
+
+            # Calculate the total distance and total packages delivered
+            total_distance = truck1.miles + truck2.miles + truck3.miles
+            total_packages_delivered = len(truck1.packages) + len(truck2.packages) + len(truck3.packages)
+
+            print(f"\n\n\x1b[1;31m\033[38;2;243;134;48mTotal metrics:\033[0m\n"
+                  f"\x1b[1;31m\033[38;2;243;134;48m———————————————————————————————————————————————\033[0m")
+            print("Total Distance: ", total_distance)
+            print(f"Total Time Spent: {total_time_corrected:.1f} hours")
+            print("Total Packages Delivered: ", total_packages_delivered)
+        # If the user chooses to lookup package status
+        elif user_choice.lower() == 'l':
+            user_time = input(
+                "\n\x1b[1;31m\033[38;2;243;134;48m Please input the time in 24-hour [HH:MM] format you wish to view the package statuses for, e.g., enter 14:30 for 2:30 PM:\033[0m \n> ")
+            (h, m) = user_time.split(":")
+            time_change = datetime.timedelta(hours=int(h), minutes=int(m))
+
+            try:
+                single_entry = [int(input(
+                    "\n\n\x1b[1;31m\033[38;2;243;134;48mPlease enter the package ID [1-40] you wish to view, or enter to view all packages:\033[0m \n> "))]
+            except ValueError:
+                single_entry = range(1, 41)  # Assuming 40 packages
+
+            for package_id in single_entry:
+                package = packageHash.search(
+                    package_id)  # Assuming package_hash is the hash table object containing package information
+                package.statusUpdate(
+                    time_change)  # Assuming status_update is a method in your package object that updates the status based on the given time
+                print(str(package))  # Print the updated package information
 
 
-print(f"\nTotal metrics:\n"
-      f"———————————————————————————————————————————————")
-print("Total Distance: ", total_distance)
-print(f"Total Time Spent: {total_time_corrected:.1f} hours")
-print("Total Packages Delivered: ", total_packages_delivered)
-
+if __name__ == "__main__":
+    main()
