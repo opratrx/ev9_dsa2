@@ -1,5 +1,81 @@
 import csv
 import datetime
+from rich.console import Console
+from rich.table import Table
+from rich.table import box
+from rich.text import Text
+
+BOLDORANGE = "\x1b[1;31m\033[38;2;243;134;48m"
+RESET = "\033[0m"
+
+# Extracting log details and adding them to the Rich Table
+def create_and_print_table(status_logs):
+
+    # Create a Table object and define its columns
+    table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+    table.add_column("Truck", style="bold rgb(255,255,255)", justify="center", width=12)
+    table.add_column("Status", style="bold", width=19)
+    table.add_column("Time", style="bold", width=18)
+    table.add_column("Miles", style="bold rgb(224,224,224)", width=18)
+    table.add_column("Address or Package #", style="bold", width=33)
+
+    # Parse each log and add it as a row to the table
+    for log in status_logs:
+        parts = log.split(",")
+
+        # Extracting truck number, status, time, and miles
+        truck_num = parts[0]
+        status = parts[1]
+        time = parts[2]
+        miles = parts[3]
+
+        # Extracting address or package number
+        address_or_package = parts[4]
+
+        # Apply coloring based on the status
+        if status.lower() == "delivered":
+            status = "[green]Delivered[/green]"
+        elif status.lower() == "stopped":
+            status = "[yellow]Stopped[/yellow]"
+        elif status.lower() == "return":
+            status = "[red]Return[/red]"
+
+        # Adding the extracted values as a new row to the table
+        table.add_row(truck_num, status, time, miles, address_or_package)
+
+    # Return the table to be printed later
+    return table
+
+
+def create_and_print_package_table(package):
+    # Create a Console object
+    console = Console(color_system="256")
+
+    # Create a Table object and define its columns
+    table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+    table.add_column("ID", style="bold rgb(255,165,0)", width=8)
+    table.add_column("Street", style="dim", width=20)
+    table.add_column("Deadline", style="dim", width=15)
+    table.add_column("Weight", style="dim", width=12)
+    table.add_column("Status", style="dim", width=15)
+    table.add_column("Departed", style="dim", width=15)
+    table.add_column("Delivered", style="dim", width=15)
+
+    # Adding status with style
+    status = package.status
+    if status.lower() == "delivered":
+        status_text = Text(status, style="bold green")
+    elif status.lower() == "hub":  # Explicit condition for 'Hub' status
+        status_text = Text(status, style="bold red")
+    else:  # Adjust as needed for other statuses
+        status_text = Text(status, style="yellow")
+
+    # Adding a row to the table with the package details
+    table.add_row(str(package.ID), package.street, package.deadline, package.weight, status_text,
+                  str(package.departureTime), str(package.deliveryTime))
+
+    # Print the table
+    console.print(table)
 
 
 # Define the log_truck_metrics_with_date function within your code
@@ -82,18 +158,16 @@ class Packages:
         self.status = status
 
     def __str__(self):
-        return (
-                    "\n\n\n\x1b[1;31m\033[38;2;243;134;48mID:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mAddress:\033[0m %-20s \t \x1b[1;31m\033[38;2;243;134;48mCity:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mState:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mZip:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mDeadline:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mWeight:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mStatus:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mDeparture Time:\033[0m %s \t \x1b[1;31m\033[38;2;243;134;48mDelivery Time:\033[0m %s" %
-                    (self.ID, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status,
-                     self.departureTime, self.deliveryTime))
+        return (self.ID, self.street, self.deadline, self.weight, self.status,
+                self.departureTime, self.deliveryTime)
 
     def statusUpdate(self, timeChange):
         if self.deliveryTime is None:
-            self.status = "At the hub"
+            self.status = "Hub"
         elif timeChange < self.departureTime:
-            self.status = "At the hub"
+            self.status = "Hub"
         elif timeChange < self.deliveryTime:
-            self.status = "En route"
+            self.status = "En-route"
         else:
             self.status = "Delivered"
         if self.ID == 9:
@@ -186,8 +260,7 @@ def truckDeliverPackages(truck, truck_num):
 
         # Indicates when the truck has stopped at the delivery location.
         statusStops = (
-            f"  \x1b[1;31m\033[38;2;243;134;48m[Truck #{truck_num}]    \x1b[1;31m✘\tstopped\t\t\t[{truck.time}]\t\t\t{truck.miles:.1f} miles driven.   \033[34;2m\t{nextPackage.street},"
-            f" {nextPackage.city}, {nextPackage.state}, {nextPackage.zip}\033[0m")
+            f"{truck_num},stopped,{truck.time},{truck.miles:.1f},{nextPackage.street}")
         status_logs.append(statusStops)
 
         truck.packages.append(nextPackage.ID)
@@ -199,7 +272,7 @@ def truckDeliverPackages(truck, truck_num):
         nextPackage.departureTime = truck.departTime
 
         # Indicates that the package has been delivered
-        statusDelivered = f"  \x1b[1;31m\033[38;2;243;134;48m[Truck #{truck_num}]    \033[32;2m✔︎\tdelivered\t\t[{truck.time}]   \t\t\t\t\t\t\t\tPackage {nextPackage.ID}.\033[0m"
+        statusDelivered = f"{truck_num},delivered,{truck.time} , ,Package {nextPackage.ID}"
         status_logs.append(statusDelivered)
 
     return_distance = Betweenst(addresss(truck.currentLocation), addresss("4001 South 700 East"))
@@ -207,7 +280,7 @@ def truckDeliverPackages(truck, truck_num):
     truck.time += datetime.timedelta(hours=return_distance / 18)
 
     # Indicates when the truck has arrived at the hub
-    statusHub = f"  \x1b[1;31m\033[38;2;243;134;48m[Truck #{truck_num}]    ⬆︎\treturn\t\t\t[{truck.time}]\t\t\t{truck.miles:.1f} miles driven.   \t4001 South 700 East (hub)\033[0m"
+    statusHub = f"{truck_num},return,{truck.time},{truck.miles:.1f},4001 South 700 East (hub)"
     status_logs.append(statusHub)
     return status_logs
 
@@ -222,7 +295,7 @@ def truckDeliverPackages(truck, truck_num):
 
 def main():
     # Print Title
-    print("\n\n\n\x1b[1;31m\033[38;2;243;134;48mWestern Governors University Parcel Service\033[0m")
+    print(BOLDORANGE + "\n\n\nWestern Governors University Parcel Service" + RESET)
 
     # Initialize truck objects (truck1, truck2, truck3) here
     truck1 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),
@@ -244,8 +317,7 @@ def main():
     # Main program loop
     while True:
         # Display the menu to the user and get the user's choice
-        user_choice = input(
-            "\n\n\n\x1b[1;31m\033[38;2;243;134;48mWhat would you like to do?\033[0m\n\td - Begin Delivery Simulation\n\tl - Lookup Package Status\n\tq - Quit\n> ")
+        user_choice = input(BOLDORANGE + "\n\n\nWhat would you like to do?" + RESET + "\n\td - Begin Delivery Simulation\n\tl - Lookup Package Status\n\tq - Quit\n> ")
 
         # If the user chooses to quit, exit the program
         if user_choice.lower() == 'q':
@@ -255,21 +327,22 @@ def main():
         elif user_choice.lower() == 'd':
             print("\n\n\nBeginning delivery simulation...\n\n\n")
 
-            # Print table header for the simulation
-            print("⎢ Truck #    ⎢ Status           ⎢ Time              ⎢ Miles                 ⎢ Address or Package #")
-            print(
-                "——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————")
-
             # Print Delivery Logs (statusStops, statusDelivered, statusHub)
-            # Assuming truck1, truck2, and truck3 are the truck objects
-            print("\n".join(status_logs_truck1))
-            print("\n".join(status_logs_truck2))
-            print("\n".join(status_logs_truck3))
 
+            # Creating the table
+            table1 = create_and_print_table(status_logs=status_logs_truck1)
+            table2 = create_and_print_table(status_logs=status_logs_truck2)
+            table3 = create_and_print_table(status_logs=status_logs_truck3)
+            console = Console(color_system="256")
+
+            # Printing the truck metrics and tables
             print("\n\x1b[1;31m\033[38;2;243;134;48mDelivery complete for all trucks!\033[0m\n")
             print(log_truck_metrics_with_date(truck1, 1))
+            console.print(table1)
             print(log_truck_metrics_with_date(truck2, 2))
+            console.print(table2)
             print(log_truck_metrics_with_date(truck3, 3))
+            console.print(table3)
 
             # Calculate the corrected total time in hours
             total_time_corrected = (
@@ -282,11 +355,13 @@ def main():
             total_distance = truck1.miles + truck2.miles + truck3.miles
             total_packages_delivered = len(truck1.packages) + len(truck2.packages) + len(truck3.packages)
 
+            # Printing the total metrics for all trucks
             print(f"\n\n\x1b[1;31m\033[38;2;243;134;48mTotal metrics:\033[0m\n"
                   f"\x1b[1;31m\033[38;2;243;134;48m———————————————————————————————————————————————\033[0m")
             print("Total Distance: ", total_distance)
             print(f"Total Time Spent: {total_time_corrected:.1f} hours")
             print("Total Packages Delivered: ", total_packages_delivered)
+
         # If the user chooses to lookup package status
         elif user_choice.lower() == 'l':
             user_time = input(
@@ -298,14 +373,12 @@ def main():
                 single_entry = [int(input(
                     "\n\n\x1b[1;31m\033[38;2;243;134;48mPlease enter the package ID [1-40] you wish to view, or enter to view all packages:\033[0m \n> "))]
             except ValueError:
-                single_entry = range(1, 41)  # Assuming 40 packages
+                single_entry = range(1, 41)  # Assuming range is from 1 to 40 packages
 
             for package_id in single_entry:
-                package = packageHash.search(
-                    package_id)  # Assuming package_hash is the hash table object containing package information
-                package.statusUpdate(
-                    time_change)  # Assuming status_update is a method in your package object that updates the status based on the given time
-                print(str(package))  # Print the updated package information
+                package = packageHash.search(package_id)
+                package.statusUpdate(time_change)
+                create_and_print_package_table(package)
 
 
 if __name__ == "__main__":
