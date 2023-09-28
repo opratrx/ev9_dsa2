@@ -10,10 +10,7 @@ The supervisor (user) needs the means to check the status of any given package a
 ## Progress & Updates
 
 #### 9/26/23 - Initial Commit
-
 >Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a >basic layout and foundational draft.
 
----
 #### 9/28/23 - Implemented a Working User Interface
-
 >Implemented a working user interface and will be incorporating a better design in the next few updates. For the time being, this will serve as the first draft of the user interface.
