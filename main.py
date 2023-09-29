@@ -1,109 +1,27 @@
+"""
+
+Author: Aaron Ballesteros
+Student ID: 011019047
+Start Date: 9/25/2023
+Last Modified: 9/28/2023
+Description: Package Delivery Service Program
+Class: Data Structures and Algorithms II
+School: Western Governors University
+
+WGUPS Parcel Service Program: This program delivers packages by finding the nearest node from
+the previous node and adds the distance to the total cost (mile). The goal is to minimize the
+cost (miles) and deliver the packages in the most efficient way based on the constraints.
+
+"""
+
 import csv
 import datetime
+import time
+
 from rich.console import Console
 from rich.table import Table
 from rich.table import box
 from rich.text import Text
-
-BOLDORANGE = "\x1b[1;31m\033[38;2;243;134;48m"
-RESET = "\033[0m"
-
-
-# Extracting log details and adding them to the Rich Table
-def create_and_print_table(status_logs):
-    # Create a Table object and define its columns
-    table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
-    table.add_column("Truck", style="bold rgb(255,255,255)", justify="center", width=12)
-    table.add_column("Status", style="bold", width=19)
-    table.add_column("Time", style="bold", width=18)
-    table.add_column("Miles", style="bold rgb(224,224,224)", width=18)
-    table.add_column("Address or Package #", style="bold", width=33)
-
-    # Parse each log and add it as a row to the table
-    for log in status_logs:
-        parts = log.split(",")
-
-        # Extracting truck number, status, time, and miles
-        truck_num = parts[0]
-        status = parts[1]
-        time = parts[2]
-        miles = parts[3]
-
-        # Extracting address or package number
-        address_or_package = parts[4]
-
-        # Apply coloring based on the status
-        if status.lower() == "delivered":
-            status = "[green]Delivered[/green]"
-        elif status.lower() == "stopped":
-            status = "[yellow]Stopped[/yellow]"
-        elif status.lower() == "return":
-            status = "[red]Return[/red]"
-
-        # Adding the extracted values as a new row to the table
-        table.add_row(truck_num, status, time, miles, address_or_package)
-
-    # Return the table to be printed later
-    return table
-
-
-def create_and_print_package_table(package):
-    # Create a Console object
-    console = Console(color_system="256")
-
-    # Create a Table object and define its columns
-    table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
-    table.add_column("ID", style="bold rgb(255,165,0)", width=8)
-    table.add_column("Street", style="dim", width=20)
-    table.add_column("Deadline", style="dim", width=15)
-    table.add_column("Weight", style="dim", width=12)
-    table.add_column("Status", style="dim", width=15)
-    table.add_column("Departed", style="dim", width=15)
-    table.add_column("Delivered", style="dim", width=15)
-
-    # Adding status with style
-    status = package.status
-    if status.lower() == "delivered":
-        status_text = Text(status, style="bold green")
-    elif status.lower() == "hub":  # Explicit condition for 'Hub' status
-        status_text = Text(status, style="bold red")
-    else:  # Adjust as needed for other statuses
-        status_text = Text(status, style="yellow")
-
-    # Adding a row to the table with the package details
-    table.add_row(str(package.ID), package.street, package.deadline, package.weight, status_text,
-                  str(package.departureTime), str(package.deliveryTime))
-
-    # Print the table
-    console.print(table)
-
-
-# Define the log_truck_metrics_with_date function within your code
-def log_truck_metrics_with_date(truck, truck_num):
-    # Calculate the drive time in hours
-    drive_time = truck.time.total_seconds() / 3600 - truck.departTime.total_seconds() / 3600  # 1 hour = 3600 seconds
-
-    # Use a recent date as the base date for Departure and Return Time
-    base_date = datetime.datetime(2023, 9, 25).date()  # Replace with the actual recent date you want to use
-
-    # Add the base date to the departure and return time and format them to include date and time information
-    departure_datetime = datetime.datetime.combine(base_date, datetime.datetime.min.time()) + truck.departTime
-    return_datetime = datetime.datetime.combine(base_date, datetime.datetime.min.time()) + truck.time
-    departure_time_str = departure_datetime.strftime('%Y-%m-%d %H:%M:%S')
-    return_time_str = return_datetime.strftime('%Y-%m-%d %H:%M:%S')
-
-    # Create a formatted string with the truck metrics
-    metrics_str = (
-        f"\n\x1b[1;31m\033[38;2;243;134;48mTruck #{truck_num} metrics:\n"
-        "———————————————————————————————————————————————\n\033[0m"
-        f"Departure Time: {departure_time_str}\n"
-        f"Return Time: {return_time_str}\n"
-        f"Drive Time: {drive_time:.2f} hours\n"
-        f"Total Distance: {truck.miles:.1f} miles\n"
-    )
-
-    return metrics_str
-
 
 '''
 ************************************************************************************************
@@ -114,9 +32,9 @@ def log_truck_metrics_with_date(truck, truck_num):
 
 
 class HashTableWChains:
-    def __init__(self, initialcapacity=40):
+    def __init__(self, initial_capacity=40):
         self.table = []
-        for i in range(initialcapacity):
+        for i in range(initial_capacity):
             self.table.append([])
 
     def insert(self, key, item):
@@ -155,7 +73,14 @@ class HashTableWChains:
         return "Hub"  # return "Hub" if no package is found aka Source
 
 
-# Package Class
+'''
+************************************************************************************************
+                                        PACKAGE CLASS
+                                  Initializing Package Class
+************************************************************************************************
+'''
+
+
 class Packages:
     def __init__(self, ID, street, city, state, zip, deadline, weight, notes, status='At Hub', departureTime=None,
                  deliveryTime=None):
@@ -193,7 +118,14 @@ class Packages:
                 self.zip = "84103"
 
 
-# Load package data from CSV
+'''
+************************************************************************************************
+                                  READ IN PACKAGE DATA FROM CSV
+                                      Time Complexity: O(n^2)
+************************************************************************************************
+'''
+
+
 def loadPackageData(filename):
     with open(filename) as packagess:
         packageInfo = csv.reader(packagess, delimiter=',')
@@ -226,8 +158,14 @@ with open("distanceCSV.csv") as disCSV:
 # Load package data
 loadPackageData('packageCSV.csv')
 
+'''
+************************************************************************************************
+                                        TRUCK CLASS
+                                 Initializing Truck Values
+************************************************************************************************
+'''
 
-# Truck Class
+
 class Trucks:
     def __init__(self, speed, miles, currentLocation, departTime, packages):
         self.speed = speed
@@ -254,16 +192,16 @@ def Betweenst(addy1, addy2):
 
 '''
 ************************************************************************************************
-                                    NEAREST NEIGHBOR ALGORITHM
+                                GREEDY / NEAREST NEIGHBOR ALGORITHM
                                       Time Complexity: O(n^2)
 ************************************************************************************************
 '''
 
 
 def truckDeliverPackages(truck, truck_num):
-    # Initialize a table for logging intermediate state
-    console = Console(color_system="256")
-    table = Table(title="\n[bold][yellow]Algorithm Progress for Truck #" + str(truck_num) + "[/yellow][/bold]", show_header=True, header_style="bold rgb(255,165,0)", box=box.MINIMAL_DOUBLE_HEAD)
+    # Initialize a table for logging status of algorithms
+    table = Table(title="\n[bold][yellow]Algorithm Progress for Truck #" + str(truck_num) + "[/yellow][/bold]",
+                  show_header=True, header_style="bold rgb(255,165,0)", box=box.MINIMAL_DOUBLE_HEAD)
     table.add_column("Current Node", justify="right")
     table.add_column("Candidates", justify="right")
     table.add_column("Chosen Node", justify="right")
@@ -297,7 +235,7 @@ def truckDeliverPackages(truck, truck_num):
             # console.print(f"[green]Considering package:[/green] {considering_ids}")
 
             # Uncomment to view the package street in addition to its ID
-            # console.print(f"\n[green]Considering package:[/green] {package.ID} at {package.street}")
+            # console.print(f"\n[green]Considering package:[/green] {package.ID} at [white]{package.street}[/white]")
 
             candidates.append(package.ID)
 
@@ -316,7 +254,8 @@ def truckDeliverPackages(truck, truck_num):
                 nextAddy = Betweenst(addresss(truck.currentLocation), addresss(package.street))
                 nextPackage = package
 
-        current_node = truck.currentLocation
+        # Initialize table parameters for each decision
+        # current_node = truck.currentLocation
         candidates_ids = ", ".join(str(candidate) for candidate in candidates)
         current_package_id = packageHash.get_package_id_by_street(truck.currentLocation)
         chosen_node = nextPackage.street if nextPackage else "N/A"
@@ -370,8 +309,191 @@ def truckDeliverPackages(truck, truck_num):
 ************************************************************************************************
 '''
 
+# Global color settings for the user interface
+BOLDORANGE = "\x1b[1;31m\033[38;2;243;134;48m"
+RESET = "\033[0m"
+
+'''
+************************************************************************************************
+                            CREATE AND PRINT PACKAGE PARAMETERS TABLE
+                                     Rich Tables For Console
+************************************************************************************************
+'''
+
+
+def create_and_print_parameter_table(package, param_choice):
+    # Create a Console object
+    console = Console(color_system="256")
+    param_dict = {'a': 'street', 'b': 'city', 'c': 'zip', 'd': 'state', 'e': 'deadline', 'f': 'weight', 'g': 'status',
+                  'h': 'all'}
+
+    # If user chooses to view all parameters, add columns for all parameters and fill in the values.
+    if param_choice == 'h':
+        table = Table(title=f"\nDetails for Package ID: {package.ID}", show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+        table.add_column("Address")
+        table.add_column("City")
+        table.add_column("Zip Code")
+        table.add_column("State")
+        table.add_column("Deadline")
+        table.add_column("Weight")
+        table.add_column("Status")
+
+        # Adding status with style
+        status = package.status
+        if status.lower() == "delivered":
+            status_text = Text(status, style="bold green")
+        elif status.lower() == "hub":  # Explicit condition for 'Hub' status
+            status_text = Text(status, style="bold red")
+        else:  # Adjust as needed for other statuses
+            status_text = Text(status, style="yellow")
+
+        table.add_row(package.street, package.city, package.zip, package.state, package.deadline, package.weight,
+                      status_text)
+
+    # If user chooses to view a specific parameter, create a table with a single column for that parameter and fill in the value.
+    else:
+        param = param_dict[param_choice]
+        table = Table(title=f"\n{param.capitalize()} for Package ID: {package.ID}", show_header=True,
+                      header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+        table.add_column(param.capitalize())
+
+        # Get the status using getattr to fetch the value of the attribute named by the param variable
+        status = getattr(package, param)
+
+        # Apply coloring based on the status
+        if status.lower() == "delivered":
+            status_text = Text(status, style="bold green")
+        elif status.lower() == "hub":  # Explicit condition for 'Hub' status
+            status_text = Text(status, style="bold red")
+        else:  # Adjust as needed for other statuses
+            status_text = Text(status, style="yellow")
+
+        table.add_row(status_text)  # Add the styled status text as a row to the table without converting it to a string
+
+    console.print(table)  # Print the table to the console
+
+
+'''
+************************************************************************************************
+                            CREATE AND PRINT DELIVERY SIMULATION TABLE
+                                     Rich Tables For Console
+************************************************************************************************
+'''
+
+
+# Extracting log details and adding them to the Rich Table
+def create_and_print_table(status_logs):
+    # Create a Table object and define its columns
+    table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+    table.add_column("Truck", style="bold rgb(255,255,255)", justify="center", width=12)
+    table.add_column("Status", style="bold", width=19)
+    table.add_column("Time", style="bold", width=18)
+    table.add_column("Miles", style="bold rgb(224,224,224)", width=18)
+    table.add_column("Address or Package #", style="bold", width=33)
+
+    # Parse each log and add it as a row to the table
+    for log in status_logs:
+        parts = log.split(",")
+
+        # Extracting truck number, status, time, and miles
+        truck_num = parts[0]
+        status = parts[1]
+        time = parts[2]
+        miles = parts[3]
+
+        # Extracting address or package number
+        address_or_package = parts[4]
+
+        # Apply coloring based on the status
+        if status.lower() == "delivered":
+            status = "[green]Delivered[/green]"
+        elif status.lower() == "stopped":
+            status = "[yellow]Stopped[/yellow]"
+        elif status.lower() == "return":
+            status = "[red]Return[/red]"
+
+        # Adding the extracted values as a new row to the table
+        table.add_row(truck_num, status, time, miles, address_or_package)
+
+    # Return the table to be printed later
+    return table
+
+
+'''
+************************************************************************************************
+                            CREATE AND PRINT PACKAGE LOOKUP TABLE
+                                    Rich Tables For Console
+************************************************************************************************
+'''
+
+
+def create_and_print_package_table(package):
+    # Create a Console object
+    console = Console(color_system="256")
+
+    # Create a Table object and define its columns
+    table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+    table.add_column("ID", style="bold rgb(255,165,0)", width=8)
+    table.add_column("Street", style="dim", width=20)
+    table.add_column("Deadline", style="dim", width=15)
+    table.add_column("Weight", style="dim", width=12)
+    table.add_column("Status", style="dim", width=15)
+    table.add_column("Departed", style="dim", width=15)
+    table.add_column("Delivered", style="bold yellow", width=15)
+
+    # Adding status with style
+    status = package.status
+    if status.lower() == "delivered":
+        status_text = Text(status, style="bold green")
+    elif status.lower() == "hub":  # Explicit condition for 'Hub' status
+        status_text = Text(status, style="bold red")
+    else:  # Adjust as needed for other statuses
+        status_text = Text(status, style="yellow")
+
+    # Adding a row to the table with the package details
+    table.add_row(str(package.ID), package.street, package.deadline, package.weight, status_text,
+                  str(package.departureTime), str(package.deliveryTime))
+
+    # Print the table
+    console.print(table)
+
+
+'''
+************************************************************************************************
+                    CREATE AND PRINT TRUCK METRICS AFTER DELIVERY SIMULATION
+                                Logging Truck Metrics after Delivery
+************************************************************************************************
+'''
+
+
+def log_truck_metrics_with_date(truck, truck_num):
+    # Calculate the drive time in hours
+    drive_time = truck.time.total_seconds() / 3600 - truck.departTime.total_seconds() / 3600  # 1 hour = 3600 seconds
+
+    # Use a recent date as the base date for Departure and Return Time
+    base_date = datetime.datetime(2023, 9, 25).date()  # Replace with the actual recent date you want to use
+
+    # Add the base date to the departure and return time and format them to include date and time information
+    departure_datetime = datetime.datetime.combine(base_date, datetime.datetime.min.time()) + truck.departTime
+    return_datetime = datetime.datetime.combine(base_date, datetime.datetime.min.time()) + truck.time
+    departure_time_str = departure_datetime.strftime('%Y-%m-%d %H:%M:%S')
+    return_time_str = return_datetime.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Create a formatted string with the truck metrics
+    metrics_str = (
+        f"\n\x1b[1;31m\033[38;2;243;134;48mTruck #{truck_num} metrics:\n"
+        "———————————————————————————————————————————————\n\033[0m"
+        f"Departure Time: {departure_time_str}\n"
+        f"Return Time: {return_time_str}\n"
+        f"Drive Time: {drive_time:.2f} hours\n"
+        f"Total Distance: {truck.miles:.1f} miles\n"
+    )
+
+    return metrics_str
+
 
 def main():
+    console = Console(color_system="256")
     # Print Title
     print(BOLDORANGE + "\n\n\nWestern Governors University Parcel Service" + RESET)
 
@@ -392,7 +514,6 @@ def main():
     # Display overall miles for all the trucks
     print("The overall miles are:", (truck1.miles + truck2.miles + truck3.miles))
 
-    # TODO: Implement input validation for the user input fields
     # Main program loop
     while True:
         # Display the menu to the user and get the user's choice
@@ -405,7 +526,8 @@ def main():
 
         # If the user chooses to begin the delivery simulation
         elif user_choice.lower() == 'd':
-            print("\n\n\nBeginning delivery simulation...\n\n\n")
+            console.print("\n\n\n[yellow]Beginning delivery simulation...[/yellow]\n\n\n")
+            time.sleep(1)
 
             # Print Delivery Logs (statusStops, statusDelivered, statusHub)
 
@@ -416,12 +538,18 @@ def main():
             console = Console(color_system="256")
 
             # Printing the truck metrics and tables
-            print("\n\x1b[1;31m\033[38;2;243;134;48mDelivery complete for all trucks!\033[0m\n")
+            console.print("\n[bold][green]Delivery complete for all trucks![green][/bold]\n")
+            time.sleep(0.5)
             print(log_truck_metrics_with_date(truck1, 1))
+            time.sleep(0.5)
             console.print(table1)
+            time.sleep(0.5)
             print(log_truck_metrics_with_date(truck2, 2))
+            time.sleep(0.5)
             console.print(table2)
+            time.sleep(0.5)
             print(log_truck_metrics_with_date(truck3, 3))
+            time.sleep(0.5)
             console.print(table3)
 
             # Calculate the corrected total time in hours
@@ -442,23 +570,53 @@ def main():
             print(f"Total Time Spent: {total_time_corrected:.1f} hours")
             print("Total Packages Delivered: ", total_packages_delivered)
 
-        # If the user chooses to lookup package status
         elif user_choice.lower() == 'l':
-            user_time = input(
-                "\n\x1b[1;31m\033[38;2;243;134;48m Please input the time in 24-hour [HH:MM] format you wish to view the package statuses for, e.g., enter 14:30 for 2:30 PM:\033[0m \n> ")
-            (h, m) = user_time.split(":")
-            time_change = datetime.timedelta(hours=int(h), minutes=int(m))
+            while True:
+                # User inputs time
+                user_time = input(BOLDORANGE + "\nPlease input the time in 24-hour [HH:MM] format you wish to view the package statuses for, e.g., enter 14:30 for 2:30 PM:" + RESET + "\n> ")
 
+                # Split the entered time by ":"
+                time_parts = user_time.split(":")
+
+                # Check if the entered time is in correct format and after 08:00
+                if len(time_parts) == 2 and time_parts[0].isdigit() and time_parts[1].isdigit():
+                    h, m = map(int, time_parts)
+                    if 8 <= h < 24 and 0 <= m < 60:
+                        time_change = datetime.timedelta(hours=h, minutes=m)
+                        break  # Exit the loop if valid time is entered
+                    else:
+                        console.print("[red]Invalid time! Please enter a time after 08:00.[/red]")
+                else:
+                    console.print("[red]Invalid format! Please enter time in HH:MM format.[/red]")
             try:
-                single_entry = [int(input(
-                    "\n\n\x1b[1;31m\033[38;2;243;134;48mPlease enter the package ID [1-40] you wish to view, or enter to view all packages:\033[0m \n> "))]
+                package_id = input(
+                    BOLDORANGE + "\n\nPlease enter the package ID you wish to view, or press Enter to view all packages:" + RESET + "\n> ")
+                if package_id:
+                    packages_to_view = [packageHash.search(int(package_id))]
+                    # User selects parameter to view since a specific package ID is entered
+                    param_choice = input(BOLDORANGE + "\n\nSelect the parameter you want to view:\n" + RESET +
+                                         "a - Address\nb - City\nc - Zip Code\nd - State\ne - Deadline\nf - Weight\ng - Status\nh - All\n> ").lower()
+                    param_dict = {'a': 'street', 'b': 'city', 'c': 'zip', 'd': 'state', 'e': 'deadline', 'f': 'weight',
+                                  'g': 'status', 'h': 'all'}
+                    if param_choice not in param_dict:
+                        console.print("[red]Invalid choice! Please select a valid option.[/red]")
+                        continue
+                    # Display selected parameter for the entered package ID
+                    package = packages_to_view[0]
+                    package.statusUpdate(time_change)
+                    create_and_print_parameter_table(package, param_choice)
+                else:
+                    # Display all parameters using create_and_print_package_table for all packages
+                    for i in range(1, 41):  # Assuming 40 packages
+                        package = packageHash.search(i)
+                        package.statusUpdate(time_change)
+                        create_and_print_package_table(package)
             except ValueError:
-                single_entry = range(1, 41)  # Assuming range is from 1 to 40 packages
-
-            for package_id in single_entry:
-                package = packageHash.search(package_id)
-                package.statusUpdate(time_change)
-                create_and_print_package_table(package)
+                console.print("\n[red]Invalid input! Please enter a valid package ID or press Enter for all packages.[/red]")
+                continue
+        else:
+            console.print("\n[yellow]Invalid input! Please enter a valid choice.[/yellow]")
+            continue
 
 
 if __name__ == "__main__":
