@@ -19,4 +19,7 @@ The supervisor (user) needs the means to check the status of any given package a
 >Improving the look and feel of the user interface using the Rich library to oraganize the package delivery process into a data table.
 
 #### 9/28/23 - Improved CLI and Added Algorithm Analysis + Status Checks for Each Process in the Algorithm.
->Improving the CLI and Added a status check for each step in the process of the Greedy / Nearest Neighbor Algorithm for Analysis.
+>Improving the CLI and added a status check for each step in the process of the Greedy / Nearest Neighbor Algorithm for Analysis.
+
+#### 9/29/23 - Added Input Validation, View Package by Parameter, and Improved CLI for UI / UX.
+>Implemented input validation throughout each step of the program. Implemented the view by package parameter feature: to view individual parameters of each package ID. Added more table styling to the new feature. For an overall improved user experience and program functionality. All program requirements / specifications are met.
