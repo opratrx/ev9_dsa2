@@ -17,3 +17,6 @@ The supervisor (user) needs the means to check the status of any given package a
 
 #### 9/28/23 - Improved User Interface Using the Textualize Rich Library
 >Improving the look and feel of the user interface using the Rich library to oraganize the package delivery process into a data table.
+
+#### 9/28/23 - Improved CLI and Added Algorithm Analysis + Status Checks for Each Process in the Algorithm.
+>Improving the CLI and Added a status check for each step in the process of the Greedy / Nearest Neighbor Algorithm for Analysis.
