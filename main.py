@@ -8,9 +8,9 @@ from rich.text import Text
 BOLDORANGE = "\x1b[1;31m\033[38;2;243;134;48m"
 RESET = "\033[0m"
 
+
 # Extracting log details and adding them to the Rich Table
 def create_and_print_table(status_logs):
-
     # Create a Table object and define its columns
     table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
     table.add_column("Truck", style="bold rgb(255,255,255)", justify="center", width=12)
@@ -105,7 +105,14 @@ def log_truck_metrics_with_date(truck, truck_num):
     return metrics_str
 
 
-# HashTable with Chaining
+'''
+************************************************************************************************
+                                    HASHMAP TABLE WITH CHAINING
+                                      Time Complexity: O(n^2)
+************************************************************************************************
+'''
+
+
 class HashTableWChains:
     def __init__(self, initialcapacity=40):
         self.table = []
@@ -139,6 +146,13 @@ class HashTableWChains:
                 bucket_list.remove(kv)
                 return True
         return False
+
+    def get_package_id_by_street(self, street):
+        for bucket in self.table:
+            for key, package in bucket:
+                if package.street == street:
+                    return package.ID
+        return "Hub"  # return "Hub" if no package is found aka Source
 
 
 # Package Class
@@ -238,25 +252,85 @@ def Betweenst(addy1, addy2):
     return float(distance)
 
 
+'''
+************************************************************************************************
+                                    NEAREST NEIGHBOR ALGORITHM
+                                      Time Complexity: O(n^2)
+************************************************************************************************
+'''
+
+
 def truckDeliverPackages(truck, truck_num):
-    enroute = []
+    # Initialize a table for logging intermediate state
+    console = Console(color_system="256")
+    table = Table(title="\n[bold][yellow]Algorithm Progress for Truck #" + str(truck_num) + "[/yellow][/bold]", show_header=True, header_style="bold rgb(255,165,0)", box=box.MINIMAL_DOUBLE_HEAD)
+    table.add_column("Current Node", justify="right")
+    table.add_column("Candidates", justify="right")
+    table.add_column("Chosen Node", justify="right")
+    table.add_column("Chosen Cost", justify="right")
+    table.add_column("Total Cost", justify="right")
+
+    en_route = []
     status_logs = []
 
     for packageID in truck.packages:
         package = packageHash.search(packageID)
-        enroute.append(package)
+        en_route.append(package)
     truck.packages.clear()
-    while len(enroute) > 0:
+
+    while len(en_route) > 0:
         nextAddy = 2000
         nextPackage = None
-        for package in enroute:
+        candidates = []
+
+        # Log the state of en route before the for loop
+        en_route_ids = ", ".join(str(package.ID) for package in en_route)
+
+        # Uncomment to print the status check in the console - Algorithm Analysis
+        # console.print(f"\n[yellow]En route before loop:[/yellow] {en_route_ids}")
+
+        for package in en_route:
+            # Log the state of the package being considered
+            considering_ids = ", ".join(str(package.ID) for package in en_route)
+
+            # Uncomment to print the status check in the console - Algorithm Analysis
+            # console.print(f"[green]Considering package:[/green] {considering_ids}")
+
+            # Uncomment to view the package street in addition to its ID
+            # console.print(f"\n[green]Considering package:[/green] {package.ID} at {package.street}")
+
+            candidates.append(package.ID)
+
+            # Log the state of candidates after appending
+            candidates_ids = ", ".join(str(candidate) for candidate in candidates)
+
+            # Uncomment to print the status check in the console - Algorithm Analysis
+            # console.print(f"[orange]Candidates after appending:[/orange] {candidates_ids}")
+
             if package.ID in [25, 6]:
                 nextPackage = package
                 nextAddy = Betweenst(addresss(truck.currentLocation), addresss(package.street))
                 break
+
             if Betweenst(addresss(truck.currentLocation), addresss(package.street)) <= nextAddy:
                 nextAddy = Betweenst(addresss(truck.currentLocation), addresss(package.street))
                 nextPackage = package
+
+        current_node = truck.currentLocation
+        candidates_ids = ", ".join(str(candidate) for candidate in candidates)
+        current_package_id = packageHash.get_package_id_by_street(truck.currentLocation)
+        chosen_node = nextPackage.street if nextPackage else "N/A"
+        chosen_package_id = packageHash.get_package_id_by_street(chosen_node) if nextPackage else "N/A"
+        chosen_cost = nextAddy
+        total_cost = truck.miles + chosen_cost
+
+        table.add_row(
+            Text(str(current_package_id), style="black on yellow", justify="center"),
+            Text(str(candidates_ids), style="bold green", justify="left"),
+            Text(str(chosen_package_id), style="black on green", justify="center"),
+            Text(str(round(chosen_cost, 2)), style="bold red"),
+            Text(str(round(total_cost, 2)), style="bold red")
+        )
 
         # Indicates when the truck has stopped at the delivery location.
         statusStops = (
@@ -264,7 +338,7 @@ def truckDeliverPackages(truck, truck_num):
         status_logs.append(statusStops)
 
         truck.packages.append(nextPackage.ID)
-        enroute.remove(nextPackage)
+        en_route.remove(nextPackage)
         truck.miles += nextAddy
         truck.currentLocation = nextPackage.street
         truck.time += datetime.timedelta(hours=nextAddy / 18)
@@ -282,6 +356,10 @@ def truckDeliverPackages(truck, truck_num):
     # Indicates when the truck has arrived at the hub
     statusHub = f"{truck_num},return,{truck.time},{truck.miles:.1f},4001 South 700 East (hub)"
     status_logs.append(statusHub)
+
+    # Uncomment to print the status check in the console - Algorithm Analysis
+    # console.print(table)
+
     return status_logs
 
 
@@ -314,10 +392,12 @@ def main():
     # Display overall miles for all the trucks
     print("The overall miles are:", (truck1.miles + truck2.miles + truck3.miles))
 
+    # TODO: Implement input validation for the user input fields
     # Main program loop
     while True:
         # Display the menu to the user and get the user's choice
-        user_choice = input(BOLDORANGE + "\n\n\nWhat would you like to do?" + RESET + "\n\td - Begin Delivery Simulation\n\tl - Lookup Package Status\n\tq - Quit\n> ")
+        user_choice = input(
+            BOLDORANGE + "\n\n\nWhat would you like to do?" + RESET + "\n\td - Begin Delivery Simulation\n\tl - Lookup Package Status\n\tq - Quit\n> ")
 
         # If the user chooses to quit, exit the program
         if user_choice.lower() == 'q':
