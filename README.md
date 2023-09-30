@@ -162,7 +162,7 @@ def truckDeliverPackages(truck, truck_num):
 Prepares a visual representation (a table) of the algorithm's progress using the Rich Library.
 <br><br>
 ### Time Complexity
-O(n^2) due to the nested loops where the algorithm iterates over the packages in transit for each delivery.
+O($\sqrt(n)^2$) due to the nested loops where the algorithm iterates over the packages in transit for each delivery.
 <br><br><br><br>
 ![BigO](https://github.com/opratrx/opratrx/blob/master/big-ochart.png?raw=true)
 <br><br><br><br>
