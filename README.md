@@ -152,6 +152,8 @@ Prepares a visual representation (a table) of the algorithm's progress using the
 <br><br>
 ### Time Complexity
 O(n^2) due to the nested loops where the algorithm iterates over the packages in transit for each delivery.
-<br><br>
+<br><br><br><br>
+![BigO](https://github.com/opratrx/opratrx/blob/master/big-ochart.png?raw=true)
+<br><br><br><br>
 ### Example
 If the truck is at location A, and there are packages to be delivered at locations B, C, and D, the function will calculate the distance from A to B, A to C, and A to D, and select the location with the minimum distance.
