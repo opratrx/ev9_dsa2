@@ -1,13 +1,17 @@
 # C950 - WGUPS Delivery Tracking System
 
-The Western Governors University Parcel Service (WGUPS) needs to determine the best route and delivery distribution for their Daily Local Deliveries. The Salt Lake City DLD route has three trucks, two drivers, and an average of 40 packages to deliver each day; each package has specific criteria and delivery requirements.
-
+The Western Governors University Parcel Service (WGUPS) is tasked with determining the best route and delivery distribution for their Daily Local Deliveries in Salt Lake City.
+<br><br>
+## Overview
+The Salt Lake City DLD route has three trucks, two drivers, and an average of 40 packages to deliver each day; each package has specific criteria and delivery requirements.
+<br><br>
 ## Objective
+The aim is to write efficient code that presents a solution for delivering all 40 packages on time, according to their criteria, while minimizing the total number of miles traveled by the trucks. The code should also allow the supervisor to check the status of any given package at any given time using package IDs, and it should report delivery times, which packages are at the hub, and which are en route.
+<br><br>
+## User Interface
+A user-friendly interface has been developed and improved over several iterations to present the package delivery process in a clean and organized manner.
 
-Write code that determines and presents a solution delivering all 40 packages, listed in the attached “WGUPSPackage File,” on time, according to their criteria while reducing the total number of miles traveled by the trucks. The “Salt Lake City Downtown Map” provides each address’s location, and the “WGUPS Distance Table” provides the distance between each address (note: mileage on the distance files may not match distances on the map).
- 
-The supervisor (user) needs the means to check the status of any given package at any given time using package IDs. The report should also include the **delivery times**, **which packages are at the hub**, and **en route**. The intent is to use this program for this specific location and use the same program in different cities as WGUPS expands its business. As such, you will need to include detailed comments following the industry-standards to make your code easy to read and justifying the decisions you made while writing your program.
-
+<br><br><br><br>
 ## Progress & Updates
 
 > #### 9/26/23 - Initial Commit
@@ -33,56 +37,57 @@ The supervisor (user) needs the means to check the status of any given package a
 > #### 9/30/23 - Added Documentation
 >- Added documentation for each class and method in the program including the ReadMe Documentation.
 
-## Documentation
-
+<br><br><br><br>
+# Documentation
+<br><br>
 ### HashTableWChains Class
->This class represents a hash table with chaining implementation.
->
->#### Methods
->- `__init__(self, initial_capacity=40)`: Initializes the hash table with an initial capacity. Creates an empty table with empty lists as buckets.
->- `insert(self, key, item)`: Inserts an item into the hash table based on the calculated hash value of the key.
->- `search(self, key)`: Searches for an item in the hash table based on the key.
->- `remove(self, key)`: Removes an item from the hash table based on the key.
->- `get_package_id_by_street(self, street)`: Searches for a package in the hash table based on the street address.
-
+This class represents a hash table with chaining implementation.
+<br><br>
+#### Methods
+- `__init__(self, initial_capacity=40)`: Initializes the hash table with an initial capacity. Creates an empty table with empty lists as buckets.
+- `insert(self, key, item)`: Inserts an item into the hash table based on the calculated hash value of the key.
+- `search(self, key)`: Searches for an item in the hash table based on the key.
+- `remove(self, key)`: Removes an item from the hash table based on the key.
+- `get_package_id_by_street(self, street)`: Searches for a package in the hash table based on the street address.
+<br><br><br><br>
 ### Packages Class
->This class represents a package with various attributes such as ID, street, city, state, zip, deadline, weight, notes, status, departureTime, and deliveryTime.
->
->#### Methods
->- `__init__(self, ID, street, city, state, zip, deadline, weight, notes, status='At Hub', departureTime=None, deliveryTime=None)`: Initializes a package object with the given attributes.
->- `__str__(self)`: Returns a string representation of the package object.
->- `statusUpdate(self, timeChange)`: Updates the status of the package based on the given time change.
-
+This class represents a package with various attributes such as ID, street, city, state, zip, deadline, weight, notes, status, departureTime, and deliveryTime.
+<br><br>
+#### Methods
+- `__init__(self, ID, street, city, state, zip, deadline, weight, notes, status='At Hub', departureTime=None, deliveryTime=None)`: Initializes a package object with the given attributes.
+- `__str__(self)`: Returns a string representation of the package object.
+- `statusUpdate(self, timeChange)`: Updates the status of the package based on the given time change.
+<br><br><br><br>
 ### Functions
->- `loadPackageData(filename)`: Loads package data from a CSV file and inserts it into the packageHash hash table.
->- `addresss(address)`: Searches for an address in the addressCSV list and returns the corresponding address ID.
->- `Betweenst(addy1, addy2)`: Calculates the distance between two addresses based on the address IDs.
->- `truckDeliverPackages(truck, truck_num)`: Simulates the delivery process for a truck.
->- `create_and_print_parameter_table(package, param_choice)`: Creates and prints a table with the specified parameter for a package.
->- `create_and_print_table(status_logs)`: Creates and prints a table with the status logs.
->- `create_and_print_package_table(package)`: Creates and prints a table with the details of a package.
->- `log_truck_metrics_with_date(truck, truck_num)`: Generates a string with the metrics of a truck.
->- `print_total_metrics(total_distance, total_time_corrected, total_packages_delivered)`: Creates and prints a table with the total metrics of all trucks.
->- `main()`: The main entry point of the program.
-
+- `loadPackageData(filename)`: Loads package data from a CSV file and inserts it into the packageHash hash table.
+- `addresss(address)`: Searches for an address in the addressCSV list and returns the corresponding address ID.
+- `Betweenst(addy1, addy2)`: Calculates the distance between two addresses based on the address IDs.
+- `truckDeliverPackages(truck, truck_num)`: Simulates the delivery process for a truck.
+- `create_and_print_parameter_table(package, param_choice)`: Creates and prints a table with the specified parameter for a package.
+- `create_and_print_table(status_logs)`: Creates and prints a table with the status logs.
+- `create_and_print_package_table(package)`: Creates and prints a table with the details of a package.
+- `log_truck_metrics_with_date(truck, truck_num)`: Generates a string with the metrics of a truck.
+- `print_total_metrics(total_distance, total_time_corrected, total_packages_delivered)`: Creates and prints a table with the total metrics of all trucks.
+- `main()`: The main entry point of the program.
+<br><br><br><br>
 ### Trucks Class
->This class represents a truck with attributes such as speed, miles, currentLocation, departTime, and packages.
->
->#### Methods
->- `__init__(self, speed, miles, currentLocation, departTime, packages)`: Initializes a truck object with the given attributes.
+This class represents a truck with attributes such as speed, miles, currentLocation, departTime, and packages.
+<br><br>
+#### Methods
+- `__init__(self, speed, miles, currentLocation, departTime, packages)`: Initializes a truck object with the given attributes.
 
-
+<br><br>
 ---
-
-### Algorithm Description:
-
-> The `truckDeliverPackages` function is responsible for simulating the delivery process of a truck. The algorithm implemented in this function is essentially a variation of the Nearest Neighbor Algorithm, which is a Greedy Algorithm used to find the shortest possible route that visits a given set of points. 
-In this context, the algorithm is used to determine the optimal route for the truck to deliver all the packages, minimizing the total distance traveled. The function takes a `truck` object and a `truck_num` as parameters, where the `truck` object contains attributes related to the truck, such as speed, current location, and packages to be delivered, and `truck_num` represents the number assigned to the truck.
-
-### Overview of the Algorithm
-> The `truckDeliverPackages(truck, truck_num)` function aims to minimize the total travel distance for each truck and effectively deliver all packages assigned to the truck based on the provided constraints. It utilizes a Greedy / Nearest Neighbor Algorithm, where the truck, at each step, selects the closest next package to deliver.
-
-### Algorithm Steps
+<br><br>
+## Nearest Neighbor Algorithm
+<br><br>
+#### Description
+The `truckDeliverPackages` function is a variation of the Nearest Neighbor Algorithm, a Greedy Algorithm used to find the shortest possible route that visits a given set of points.
+<br><br>
+#### Overview
+The function aims to minimize the total travel distance for each truck and effectively deliver all packages assigned to the truck based on the provided constraints.
+<br><br><br><br>
+#### Algorithm Steps
 > 1. **Initialization:** The function initializes various local variables, such as `en_route` to store packages currently in transit and `status_logs` to store logs of the delivery process.
 > 2. **Package Assignment:** The function assigns the initial set of packages to the truck and sets their status to `en_route`.
 > 3. **Delivery Loop:** The function enters a loop where, at each iteration, it selects the nearest package to the current location and delivers it. The loop continues until all packages are delivered.
@@ -93,7 +98,8 @@ In this context, the algorithm is used to determine the optimal route for the tr
 > 4. **Return to Hub:** After delivering all packages, the truck returns to the hub. The distance to return is added to the total miles, and the return status is logged.
 > 5. **Status Logs:** The function returns the `status_logs` representing the delivery process of the truck.
 
-### Pseudocode:
+<br><br><br><br>
+#### Pseudocode:
 
 ```python
 def truckDeliverPackages(truck, truck_num):
@@ -120,19 +126,18 @@ def truckDeliverPackages(truck, truck_num):
     
     return status_logs  # return the status logs of the delivery process
 ```
-
+<br><br><br><br>
 ### Implementation Details
->- The function makes use of helper functions like `addresss` and `Betweenst` to get address indices and calculate distances between addresses, respectively.
->- It utilizes the `datetime.timedelta` class to manage and update the time efficiently during the delivery process.
->- The function carefully handles the status of each package at different times and logs each status change, including stops, deliveries, and returns.
->- Special considerations and constraints are applied for specific package IDs (e.g., package IDs 25, 6).
-
+- The function makes use of helper functions like `addresss` and `Betweenst` to get address indices and calculate distances between addresses, respectively.
+- It utilizes the `datetime.timedelta` class to manage and update the time efficiently during the delivery process.
+- The function carefully handles the status of each package at different times and logs each status change, including stops, deliveries, and returns.
+- Special considerations and constraints are applied for specific package IDs (e.g., package IDs 25, 6).
+<br><br><br><br>
 ### Visualization
-> The function also prepares a visual representation (a table) of the algorithm's progress using the Rich Library, showing the current node, candidates, chosen node, chosen cost, and total cost at each step. This table provides an insightful view of how the algorithm makes decisions at each step.
-
+Prepares a visual representation (a table) of the algorithm's progress using the Rich Library.
+<br><br><br><br>
 ### Time Complexity
-> The overall time complexity of the algorithm is (O(n^2) due to the nested loops where the algorithm iterates over the packages in transit for each delivery.
-
+O(n^2) due to the nested loops where the algorithm iterates over the packages in transit for each delivery.
+<br><br><br><br>
 ### Example
-> For instance, if the truck is at location A, and there are packages to be delivered at locations B, C, and D, the function will calculate the distance from A to B, A to C, and A to D, and select the location with the minimum distance. After delivering to the selected location, it repeats the process for the remaining locations.
-
+If the truck is at location A, and there are packages to be delivered at locations B, C, and D, the function will calculate the distance from A to B, A to C, and A to D, and select the location with the minimum distance.
