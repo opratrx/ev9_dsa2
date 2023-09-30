@@ -1,7 +1,8 @@
 # <span style="color:orange;">C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-ff6600)
 <br><br>
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
+![Alt Text](https://github.com/opratrx/opratrx/blob/master/DSA2.gif?raw=true)
 
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
 
 The Western Governors University Parcel Service (WGUPS) is tasked with determining the best route and delivery distribution for their Daily Local Deliveries in Salt Lake City.
 <br><br>
