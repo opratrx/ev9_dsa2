@@ -1,4 +1,7 @@
-# C950 - WGUPS Delivery Tracking System
+# C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-orange)
+<br><br>
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
+
 
 The Western Governors University Parcel Service (WGUPS) is tasked with determining the best route and delivery distribution for their Daily Local Deliveries in Salt Lake City.
 <br><br>
@@ -11,9 +14,11 @@ The aim is to write efficient code that presents a solution for delivering all 4
 ## User Interface
 A user-friendly interface has been developed and improved over several iterations to present the package delivery process in a clean and organized manner.
 
-<br><br><br><br>
-## Progress & Updates
 
+<br><br><br><br>
+
+## Progress & Updates
+![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) `Commit Information`
 ###### 9/26/23 - Initial Commit
 >- Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a basic layout and foundational draft.
 > 
@@ -39,6 +44,7 @@ A user-friendly interface has been developed and improved over several iteration
 
 <br><br><br><br>
 # Documentation
+![#FFA500](https://via.placeholder.com/15/FFA500/000000?text=+) `Project Documentation`
 <br><br>
 ### HashTableWChains Class
 This class represents a hash table with chaining implementation.
@@ -80,7 +86,7 @@ This class represents a truck with attributes such as speed, miles, currentLocat
 ---
 <br><br>
 ## Nearest Neighbor Algorithm
-
+![#9900FF](https://via.placeholder.com/15/9900FF/000000?text=+) `Algorithm Analysis`
 #### Description
 The `truckDeliverPackages` function is a variation of the Nearest Neighbor Algorithm, a Greedy Algorithm used to find the shortest possible route that visits a given set of points.
 <br><br>
