@@ -1,4 +1,4 @@
-# <span style="color:orange;">C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-CC7A00)
+# <span style="color:orange;">C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-ff6600)
 <br><br>
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
 
