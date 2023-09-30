@@ -12,7 +12,7 @@ The Salt Lake City DLD route has three trucks, two drivers, and an average of 40
 The aim is to write efficient code that presents a solution for delivering all 40 packages on time, according to their criteria, while minimizing the total number of miles traveled by the trucks. The code should also allow the supervisor to check the status of any given package at any given time using package IDs, and it should report delivery times, which packages are at the hub, and which are en route.
 <br><br>
 ## User Interface
-A user-friendly interface has been developed and improved over several iterations to present the package delivery process in a clean and organized manner.
+A user-friendly interface has been developed and improved utilizing the rich library to present the package delivery process in a clean and organized manner.
 
 ![Alt Text](https://github.com/opratrx/opratrx/blob/master/DSA2.gif?raw=true)
 
