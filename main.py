@@ -14,20 +14,39 @@ cost (miles) and deliver the packages in the most efficient way based on the con
 
 """
 
+# Python core libraries - Functionality
 import csv
 import datetime
 import time
 
+# Third-party libraries - User Interface
 from rich.console import Console
 from rich.table import Table
 from rich.table import box
 from rich.text import Text
 
 '''
-************************************************************************************************
-                                    HASHMAP TABLE WITH CHAINING
-                                      Time Complexity: O(n^2)
-************************************************************************************************
+    ,------------------------------------------------------------------------------------------------,
+    |                                HASH TABLE WITH CHAINS CLASS                                    |
+    |                                Time Complexity: O(1) - O(n)                                    |
+    '------------------------------------------------------------------------------------------------'
+    
+    Description: This class represents a hash table with chaining implementation, allowing 
+                 the storage of key-value pairs. In cases of hash collisions, the colliding 
+                 items are stored in a linked list.
+    Methods: 
+        1. __init__: Initializes the hash table with an initial capacity.
+        2. insert: Inserts an item into the hash table.
+        3. search: Searches for an item based on the key.
+        4. remove: Removes an item from the hash table based on the key.
+        5. get_package_id_by_street: Searches for a package based on the street address.
+        
+    Time Complexity: 
+        - insert: O(1) average and O(n) worst case.
+        - search: O(1) average and O(n) worst case.
+        - remove: O(1) average and O(n) worst case.
+        - get_package_id_by_street: O(n) where n is the total number of items in the hash table.
+
 '''
 
 
@@ -74,10 +93,23 @@ class HashTableWChains:
 
 
 '''
-************************************************************************************************
-                                        PACKAGE CLASS
-                                  Initializing Package Class
-************************************************************************************************
+    ,------------------------------------------------------------------------------------------------,
+    |                                        PACKAGES CLASS                                          |
+    |                                     Time Complexity: O(1)                                      |
+    '------------------------------------------------------------------------------------------------'
+    
+    Description: This class represents a package with various attributes such as ID, street, 
+                 city, state, zip, deadline, weight, notes, status, departureTime, and deliveryTime.
+    Methods: 
+        1. __init__: Initializes a package object with the given attributes.
+        2. __str__: Returns a string representation of the package object.
+        3. statusUpdate: Updates the status of the package based on the given time change.
+    
+    Time Complexity: 
+        - __init__: O(1)
+        - __str__: O(1)
+        - statusUpdate: O(1)
+
 '''
 
 
@@ -118,12 +150,18 @@ class Packages:
                 self.zip = "84103"
 
 
-'''
-************************************************************************************************
-                                  READ IN PACKAGE DATA FROM CSV
-                                      Time Complexity: O(n^2)
-************************************************************************************************
-'''
+# '''
+#      | ,------------------------------------------------------------------------------------------------,
+#      | |                                PACKAGE DATA LOADING FUNCTION                                   |
+#      | |                                     loadPackageData(filename)                                  |
+#      | '------------------------------------------------------------------------------------------------'
+#      |   Description: This function loads package data from a CSV file. It opens the file and reads the package
+#      |                information using the csv.reader. It skips the header row and iterates through each row of
+#      |                package data. It extracts the necessary information and creates a Packages object. It then
+#      |                inserts the package into the packageHash hash table using the package ID as the key.
+#      |
+#      |   Time Complexity: O(n)
+# '''
 
 
 def loadPackageData(filename):
@@ -159,10 +197,16 @@ with open("distanceCSV.csv") as disCSV:
 loadPackageData('packageCSV.csv')
 
 '''
-************************************************************************************************
-                                        TRUCK CLASS
-                                 Initializing Truck Values
-************************************************************************************************
+        ,------------------------------------------------------------------------------------------------,
+        |                                          TRUCKS CLASS                                          |
+        |                                      Time Complexity: O(1)                                     |
+        '------------------------------------------------------------------------------------------------'
+        
+    Description: This class represents a truck with attributes such as speed, miles, currentLocation, 
+                    departTime, and packages.
+       
+    Time Complexity: O(1)
+
 '''
 
 
@@ -176,14 +220,36 @@ class Trucks:
         self.packages = packages
 
 
-# Helper functions for address and distance lookup
-def addresss(address):
+# '''
+#     | ,------------------------------------------------------------------------------------------------,
+#     | |                                       ADDRESS SEARCH FUNCTION                                  |
+#     | |                                         address(addresses)                                     |
+#     | '------------------------------------------------------------------------------------------------'
+#     |   Description: This function searches for an address in the addressCSV list. It iterates through each row
+#     |                of the list and checks if the address is present in the third column. If found, it returns
+#     |                the corresponding address ID.
+#     |
+#     |   Time Complexity: O(n)
+# '''
+def address(addresses):
     for row in AddressCSV:
-        if address in row[2]:
+        if addresses in row[2]:
             return int(row[0])
 
 
-def Betweenst(addy1, addy2):
+# '''
+#     | ,------------------------------------------------------------------------------------------------,
+#     | |                                   DISTANCE BETWEEN ADDRESSES FUNCTION                          |
+#     | |                                       Betweenst(addy1, addy2)                                  |
+#     | '------------------------------------------------------------------------------------------------'
+#     |   Description: This function calculates the distance between two addresses based on the address IDs. It
+#     |                retrieves the distance from the distanceCSV list using the address IDs as indices. If the
+#     |                distance is empty, it retrieves the distance from the reverse direction. It returns the
+#     |                distance as a float.
+#     |
+#     |   Time Complexity: O(1)
+# '''
+def betweenst(addy1, addy2):
     distance = DistanceCSV[addy1][addy2]
     if distance == '':
         distance = DistanceCSV[addy2][addy1]
@@ -191,10 +257,21 @@ def Betweenst(addy1, addy2):
 
 
 '''
-************************************************************************************************
-                                GREEDY / NEAREST NEIGHBOR ALGORITHM
-                                      Time Complexity: O(n^2)
-************************************************************************************************
+            ,------------------------------------------------------------------------------------------------,
+            |                               TRUCK DELIVERY SIMULATION FUNCTION                               |
+            |                                     Time Complexity: O(n^2)                                    |
+            '------------------------------------------------------------------------------------------------'       
+
+      Description: This function simulates the delivery process for a truck. It takes a truck object and
+                    truck number as input. It initializes an empty list for en_route packages and an
+                    empty list for status logs. It adds the packages from the truck object to the en_route
+                    list. It then enters a loop until all packages are delivered. In each iteration, it
+                    finds the next package to deliver based on the current location and the distance to
+                    each package's street address. It updates the status logs and truck attributes
+                    accordingly. Once all packages are delivered, it calculates the distance to return to
+                    the hub and updates the status logs and truck attributes. It returns the status logs.
+    
+      Time Complexity: O(n^2)
 '''
 
 
@@ -222,14 +299,14 @@ def truckDeliverPackages(truck, truck_num):
         candidates = []
 
         # Log the state of en route before the for loop
-        en_route_ids = ", ".join(str(package.ID) for package in en_route)
+        # en_route_ids = ", ".join(str(package.ID) for package in en_route)
 
         # Uncomment to print the status check in the console - Algorithm Analysis
         # console.print(f"\n[yellow]En route before loop:[/yellow] {en_route_ids}")
 
         for package in en_route:
             # Log the state of the package being considered
-            considering_ids = ", ".join(str(package.ID) for package in en_route)
+            # considering_ids = ", ".join(str(package.ID) for package in en_route)
 
             # Uncomment to print the status check in the console - Algorithm Analysis
             # console.print(f"[green]Considering package:[/green] {considering_ids}")
@@ -240,18 +317,18 @@ def truckDeliverPackages(truck, truck_num):
             candidates.append(package.ID)
 
             # Log the state of candidates after appending
-            candidates_ids = ", ".join(str(candidate) for candidate in candidates)
+            # candidates_ids = ", ".join(str(candidate) for candidate in candidates)
 
             # Uncomment to print the status check in the console - Algorithm Analysis
             # console.print(f"[orange]Candidates after appending:[/orange] {candidates_ids}")
 
             if package.ID in [25, 6]:
                 nextPackage = package
-                nextAddy = Betweenst(addresss(truck.currentLocation), addresss(package.street))
+                nextAddy = betweenst(address(truck.currentLocation), address(package.street))
                 break
 
-            if Betweenst(addresss(truck.currentLocation), addresss(package.street)) <= nextAddy:
-                nextAddy = Betweenst(addresss(truck.currentLocation), addresss(package.street))
+            if betweenst(address(truck.currentLocation), address(package.street)) <= nextAddy:
+                nextAddy = betweenst(address(truck.currentLocation), address(package.street))
                 nextPackage = package
 
         # Initialize table parameters for each decision
@@ -288,7 +365,7 @@ def truckDeliverPackages(truck, truck_num):
         statusDelivered = f"{truck_num},delivered,{truck.time} , ,Package {nextPackage.ID}"
         status_logs.append(statusDelivered)
 
-    return_distance = Betweenst(addresss(truck.currentLocation), addresss("4001 South 700 East"))
+    return_distance = betweenst(address(truck.currentLocation), address("4001 South 700 East"))
     truck.miles += return_distance
     truck.time += datetime.timedelta(hours=return_distance / 18)
 
@@ -303,23 +380,30 @@ def truckDeliverPackages(truck, truck_num):
 
 
 '''
-************************************************************************************************
-                                     USER INTERFACE SECTION
-                            UI / UX Design and Program Initialization
-************************************************************************************************
+ ,------------------------------------------------------------------------------------------------,
+ |                                     USER INTERFACE SECTION                                     |
+ |                            UI / UX Design and Program Initialization                           |
+ '------------------------------------------------------------------------------------------------'
 '''
 
 # Global color settings for the user interface
 BOLDORANGE = "\x1b[1;31m\033[38;2;243;134;48m"
 RESET = "\033[0m"
 
-'''
-************************************************************************************************
-                            CREATE AND PRINT PACKAGE PARAMETERS TABLE
-                                     Rich Tables For Console
-************************************************************************************************
-'''
 
+    # '''
+    #     | ,------------------------------------------------------------------------------------------------,
+    #     | |                              PARAMETER TABLE CREATION FUNCTION                                 |
+    #     | |                       create_and_print_parameter_table(package, param_choice)                  |
+    #     | '------------------------------------------------------------------------------------------------'
+    #     |   Description: This function creates and prints a table with the specified parameter for a package.
+    #     |                It takes a package object and a parameter choice as input. It creates a table with
+    #     |                appropriate columns based on the parameter choice. It retrieves the value of the
+    #     |                parameter from the package object and adds it to the table. If the parameter choice
+    #     |                is 'h', it adds all parameters to the table. It then prints the table.
+    #     |
+    #     |   Time Complexity: O(1)
+    # '''
 
 def create_and_print_parameter_table(package, param_choice):
     # Create a Console object
@@ -329,7 +413,8 @@ def create_and_print_parameter_table(package, param_choice):
 
     # If user chooses to view all parameters, add columns for all parameters and fill in the values.
     if param_choice == 'h':
-        table = Table(title=f"\nDetails for Package ID: {package.ID}", show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+        table = Table(title=f"\n[bold][yellow]Details for Package #{package.ID}[/yellow][/bold]", show_header=True,
+                      header_style="bold rgb(255,165,0)", box=box.ROUNDED)
         table.add_column("Address")
         table.add_column("City")
         table.add_column("Zip Code")
@@ -353,7 +438,8 @@ def create_and_print_parameter_table(package, param_choice):
     # If user chooses to view a specific parameter, create a table with a single column for that parameter and fill in the value.
     else:
         param = param_dict[param_choice]
-        table = Table(title=f"\n{param.capitalize()} for Package ID: {package.ID}", show_header=True,
+        table = Table(title=f"\n[bold][yellow]{param.capitalize()} for Package #{package.ID}[/yellow][/bold]",
+                      show_header=True,
                       header_style="bold rgb(255,165,0)", box=box.ROUNDED)
         table.add_column(param.capitalize())
 
@@ -372,16 +458,19 @@ def create_and_print_parameter_table(package, param_choice):
 
     console.print(table)  # Print the table to the console
 
+    # '''
+    #     | ,------------------------------------------------------------------------------------------------,
+    #     | |                                  STATUS LOGS TABLE FUNCTION                                    |
+    #     | |                                  create_and_print_table(status_logs)                           |
+    #     | '------------------------------------------------------------------------------------------------'
+    #     |   Description: This function creates and prints a table with the status logs. It takes a list of
+    #     |                status logs as input. It creates a table with appropriate columns and adds each
+    #     |                status log as a row to the table. It then prints the table.
+    #     |
+    #     |   Time Complexity: O(n)
+    # '''
 
-'''
-************************************************************************************************
-                            CREATE AND PRINT DELIVERY SIMULATION TABLE
-                                     Rich Tables For Console
-************************************************************************************************
-'''
 
-
-# Extracting log details and adding them to the Rich Table
 def create_and_print_table(status_logs):
     # Create a Table object and define its columns
     table = Table(show_header=True, header_style="bold rgb(255,165,0)", box=box.ROUNDED)
@@ -398,7 +487,7 @@ def create_and_print_table(status_logs):
         # Extracting truck number, status, time, and miles
         truck_num = parts[0]
         status = parts[1]
-        time = parts[2]
+        log_time = parts[2]
         miles = parts[3]
 
         # Extracting address or package number
@@ -413,18 +502,22 @@ def create_and_print_table(status_logs):
             status = "[red]Return[/red]"
 
         # Adding the extracted values as a new row to the table
-        table.add_row(truck_num, status, time, miles, address_or_package)
+        table.add_row(truck_num, status, log_time, miles, address_or_package)
 
     # Return the table to be printed later
     return table
 
-
-'''
-************************************************************************************************
-                            CREATE AND PRINT PACKAGE LOOKUP TABLE
-                                    Rich Tables For Console
-************************************************************************************************
-'''
+    # '''
+    #     | ,------------------------------------------------------------------------------------------------,
+    #     | |                               PACKAGE DETAILS TABLE FUNCTION                                   |
+    #     | |                             create_and_print_package_table(package)                            |
+    #     | '------------------------------------------------------------------------------------------------'
+    #     |   Description: This function creates and prints a table with the details of a package. It takes a
+    #     |                package object as input. It creates a table with appropriate columns and adds the
+    #     |                package details as a row to the table. It then prints the table.
+    #     |
+    #     |   Time Complexity: O(1)
+    # '''
 
 
 def create_and_print_package_table(package):
@@ -457,13 +550,17 @@ def create_and_print_package_table(package):
     # Print the table
     console.print(table)
 
-
-'''
-************************************************************************************************
-                    CREATE AND PRINT TRUCK METRICS AFTER DELIVERY SIMULATION
-                                Logging Truck Metrics after Delivery
-************************************************************************************************
-'''
+    # '''
+    #     | ,------------------------------------------------------------------------------------------------,
+    #     | |                               TRUCK METRICS LOGGING FUNCTION                                   |
+    #     | |                         log_truck_metrics_with_date(truck, truck_num)                          |
+    #     | '------------------------------------------------------------------------------------------------'
+    #     |   Description: This function generates a string with the metrics of a truck. It takes a truck object
+    #     |                and truck number as input. It calculates the drive time, departure time, return time,
+    #     |                and total distance. It formats the metrics as a string and returns it.
+    #     |
+    #     |   Time Complexity: O(1)
+    # '''
 
 
 def log_truck_metrics_with_date(truck, truck_num):
@@ -492,11 +589,65 @@ def log_truck_metrics_with_date(truck, truck_num):
     return metrics_str
 
 
+# '''
+#     | ,------------------------------------------------------------------------------------------------,
+#     | |                                  TOTAL METRICS TABLE FUNCTION                                  |
+#     | |                                     print_total_metrics()                                      |
+#     | '------------------------------------------------------------------------------------------------'
+#     |   Description: This function creates and prints a table with the total metrics of all trucks. It takes
+#     |                the total distance, total time corrected, and total packages delivered as input. It creates
+#     |                a table with appropriate columns and adds the metrics as a row to the table. It then prints
+#     |                the table.
+#     |
+#     |   Time Complexity: O(1)
+# '''
+
+
+def print_total_metrics(total_distance, total_time_corrected, total_packages_delivered):
+    # Create console and table objects
+    console = Console(color_system="256")
+
+    table = Table(title="\n\n[bold][yellow]Total Metrics[/yellow][/bold]", show_header=True,
+                  header_style="bold rgb(255,165,0)", box=box.ROUNDED)
+
+    # Add columns to the table
+    table.add_column("Total Distance")
+    table.add_column("Total Time Spent (hours)")
+    table.add_column("Total Packages Delivered")
+
+    # Add a single row with the metric values
+    table.add_row(str(total_distance), f"{total_time_corrected:.1f}", str(total_packages_delivered))
+
+    # Print the table to console
+    console.print(table)
+
+
+'''
+     ,------------------------------------------------------------------------------------------------,
+     |                                         MAIN FUNCTION                                          |
+     |                                    Time Complexity: O(n^2)                                     |
+     '------------------------------------------------------------------------------------------------'
+
+   Description: This function is the main entry point of the program. It displays a welcome message and
+                initializes three truck objects. It simulates the delivery process for each truck and
+                stores the status logs. It calculates the total distance, total time corrected, and total
+                packages delivered. It then enters a loop to interact with the user. The user can choose to
+                begin the delivery simulation, lookup package status, or quit the program. If the user chooses
+                to begin the delivery simulation, it prints the status logs and truck metrics. If the user
+                chooses to lookup package status, it prompts for a time and package ID, and then prints the
+                package details or parameter value.
+   
+   Time Complexity: O(n^2)
+
+'''
+
+
 def main():
     console = Console(color_system="256")
     # Print Title
     print(BOLDORANGE + "\n\n\nWestern Governors University Parcel Service" + RESET)
-
+    print("Author: Aaron Ballesteros")
+    print("ID: 011019047")
     # Initialize truck objects (truck1, truck2, truck3) here
     truck1 = Trucks(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),
                     [1, 29, 7, 30, 8, 34, 40, 13, 39, 14, 15, 16, 19, 20, 37])
@@ -511,8 +662,18 @@ def main():
     status_logs_truck2 = truckDeliverPackages(truck2, 2)
     status_logs_truck3 = truckDeliverPackages(truck3, 3)
 
-    # Display overall miles for all the trucks
-    print("The overall miles are:", (truck1.miles + truck2.miles + truck3.miles))
+    # Calculate the corrected total time in hours
+    total_time_corrected = (
+                                   (truck1.time.total_seconds() - truck1.departTime.total_seconds())
+                                   + (truck2.time.total_seconds() - truck2.departTime.total_seconds())
+                                   + (truck3.time.total_seconds() - truck3.departTime.total_seconds())
+                           ) / 3600  # Convert total seconds to hours
+
+    # Calculate the total distance and total packages delivered
+    total_distance = truck1.miles + truck2.miles + truck3.miles
+    total_packages_delivered = len(truck1.packages) + len(truck2.packages) + len(truck3.packages)
+
+    print_total_metrics(total_distance, total_time_corrected, total_packages_delivered)
 
     # Main program loop
     while True:
@@ -552,28 +713,13 @@ def main():
             time.sleep(0.5)
             console.print(table3)
 
-            # Calculate the corrected total time in hours
-            total_time_corrected = (
-                                           (truck1.time.total_seconds() - truck1.departTime.total_seconds())
-                                           + (truck2.time.total_seconds() - truck2.departTime.total_seconds())
-                                           + (truck3.time.total_seconds() - truck3.departTime.total_seconds())
-                                   ) / 3600  # Convert total seconds to hours
-
-            # Calculate the total distance and total packages delivered
-            total_distance = truck1.miles + truck2.miles + truck3.miles
-            total_packages_delivered = len(truck1.packages) + len(truck2.packages) + len(truck3.packages)
-
-            # Printing the total metrics for all trucks
-            print(f"\n\n\x1b[1;31m\033[38;2;243;134;48mTotal metrics:\033[0m\n"
-                  f"\x1b[1;31m\033[38;2;243;134;48m———————————————————————————————————————————————\033[0m")
-            print("Total Distance: ", total_distance)
-            print(f"Total Time Spent: {total_time_corrected:.1f} hours")
-            print("Total Packages Delivered: ", total_packages_delivered)
+            print_total_metrics(total_distance, total_time_corrected, total_packages_delivered)
 
         elif user_choice.lower() == 'l':
             while True:
                 # User inputs time
-                user_time = input(BOLDORANGE + "\nPlease input the time in 24-hour [HH:MM] format you wish to view the package statuses for, e.g., enter 14:30 for 2:30 PM:" + RESET + "\n> ")
+                user_time = input(
+                    BOLDORANGE + "\nPlease input the time in 24-hour [HH:MM] format you wish to view the package statuses for, e.g., enter 14:30 for 2:30 PM:" + RESET + "\n> ")
 
                 # Split the entered time by ":"
                 time_parts = user_time.split(":")
@@ -595,7 +741,7 @@ def main():
                     packages_to_view = [packageHash.search(int(package_id))]
                     # User selects parameter to view since a specific package ID is entered
                     param_choice = input(BOLDORANGE + "\n\nSelect the parameter you want to view:\n" + RESET +
-                                         "a - Address\nb - City\nc - Zip Code\nd - State\ne - Deadline\nf - Weight\ng - Status\nh - All\n> ").lower()
+                                         "\ta - Address\n\tb - City\n\tc - Zip Code\n\td - State\n\te - Deadline\n\tf - Weight\n\tg - Status\n\th - All\n> ").lower()
                     param_dict = {'a': 'street', 'b': 'city', 'c': 'zip', 'd': 'state', 'e': 'deadline', 'f': 'weight',
                                   'g': 'status', 'h': 'all'}
                     if param_choice not in param_dict:
@@ -612,7 +758,8 @@ def main():
                         package.statusUpdate(time_change)
                         create_and_print_package_table(package)
             except ValueError:
-                console.print("\n[red]Invalid input! Please enter a valid package ID or press Enter for all packages.[/red]")
+                console.print(
+                    "\n[red]Invalid input! Please enter a valid package ID or press Enter for all packages.[/red]")
                 continue
         else:
             console.print("\n[yellow]Invalid input! Please enter a valid choice.[/yellow]")
