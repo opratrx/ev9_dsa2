@@ -1,4 +1,4 @@
-# C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-orange)
+# <span style="color:orange;">C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-CC7A00)
 <br><br>
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
 
@@ -17,29 +17,36 @@ A user-friendly interface has been developed and improved over several iteration
 
 <br><br><br><br>
 
+
 ## Progress & Updates
 ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) `Commit Information`
-###### 9/26/23 - Initial Commit
+###### 9/26/23 - Initial Commit 
+> ![Version](https://img.shields.io/badge/v1-notes-339933)
 >- Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a basic layout and foundational draft.
 > 
 &nbsp;
 ###### 9/28/23 - Implemented a Working User Interface
+>  ![Version](https://img.shields.io/badge/v2-notes-339933)
 >- Implemented a working user interface and will be incorporating a better design in the next few updates. For the time being, this will serve as the first draft of the user interface.
 > 
 &nbsp;
 ###### 9/28/23 - Improved User Interface Using the Textualize Rich Library
+>  ![Version](https://img.shields.io/badge/v3-notes-339933)
 >- Improving the look and feel of the user interface using the Rich library to oraganize the package delivery process into a data table.
 > 
 &nbsp;
 ###### 9/28/23 - Improved CLI and Added Algorithm Analysis + Status Checks for Each Process in the Algorithm.
+>  ![Version](https://img.shields.io/badge/v4-notes-339933)
 >- Improving the CLI and added a status check for each step in the process of the Greedy / Nearest Neighbor Algorithm for Analysis.
 > 
 &nbsp;
 ###### 9/29/23 - Added Input Validation, View Package by Parameter, and Improved CLI for UI / UX.
+>  ![Version](https://img.shields.io/badge/v5-notes-339933)
 >- Implemented input validation throughout each step of the program. Implemented the view by package parameter feature: to view individual parameters of each package ID. Added more table styling to the new feature. For an overall improved user experience and program functionality. All program requirements / specifications are met.
 >
 &nbsp;
 ###### 9/30/23 - Added Documentation
+>  ![Version](https://img.shields.io/badge/v6-notes-339933)
 >- Added documentation for each class and method in the program including the ReadMe Documentation.
 
 <br><br><br><br>
