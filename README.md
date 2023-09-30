@@ -1,7 +1,7 @@
 # C950 - WGUPS Delivery Tracking System
 
 
-The Western Governors University Parcel Service (WGUPS) needs to determine the best route and delivery distribution for theirDaily Local Deliveries. The Salt Lake City DLD route has three trucks, two drivers, and an average of 40 packages to deliver each day; each package has specific criteria and delivery requirements.
+The Western Governors University Parcel Service (WGUPS) needs to determine the best route and delivery distribution for their Daily Local Deliveries. The Salt Lake City DLD route has three trucks, two drivers, and an average of 40 packages to deliver each day; each package has specific criteria and delivery requirements.
 
 Your task is to write code that determines and presents a solution delivering all 40 packages, listed in the attached “WGUPSPackage File,” on time, according to their criteria while reducing the total number of miles traveled by the trucks. The “Salt Lake City Downtown Map” provides each address’s location, and the “WGUPS Distance Table” provides the distance between each address (note: mileage on the distance files may not match distances on the map)
 
