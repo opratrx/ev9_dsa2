@@ -98,7 +98,7 @@ The function aims to minimize the total travel distance for each truck and effec
  4. **Return to Hub:** After delivering all packages, the truck returns to the hub. The distance to return is added to the total miles, and the return status is logged.
  5. **Status Logs:** The function returns the `status_logs` representing the delivery process of the truck.
 
-<br><br><br><br>
+<br><br>
 #### Pseudocode:
 
 ```python
