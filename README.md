@@ -22,8 +22,10 @@ A user-friendly interface has been developed and improved utilizing the rich lib
 ## Progress & Updates
 ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) `Commit Information`
 ###### 9/26/23 - Initial Commit 
-> ![Version](https://img.shields.io/badge/v1-notes-339933)
->- Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a basic layout and foundational draft.
+ ![Version](https://img.shields.io/badge/v1-notes-339933)
+
+> [!NOTE]
+> Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a basic layout and foundational draft.
 > 
 &nbsp;
 ###### 9/28/23 - Implemented a Working User Interface
