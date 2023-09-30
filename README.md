@@ -3,7 +3,7 @@
 > This project is currently a work in progress as of September 30, 2023. Please be aware that functionalities might be incomplete, and there might be frequent updates or changes.
 
 
-<br><br><br><br>
+<br><br>
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
 
