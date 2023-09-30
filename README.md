@@ -90,7 +90,7 @@ This class represents a truck with attributes such as speed, miles, currentLocat
 - `__init__(self, speed, miles, currentLocation, departTime, packages)`: Initializes a truck object with the given attributes.
 
 <br><br>
----
+
 <br><br>
 ## Nearest Neighbor Algorithm
 ![#9900FF](https://via.placeholder.com/15/9900FF/000000?text=+) `Algorithm Analysis`
