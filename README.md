@@ -80,23 +80,23 @@ This class represents a truck with attributes such as speed, miles, currentLocat
 ---
 <br><br>
 ## Nearest Neighbor Algorithm
-<br><br>
+
 #### Description
 The `truckDeliverPackages` function is a variation of the Nearest Neighbor Algorithm, a Greedy Algorithm used to find the shortest possible route that visits a given set of points.
 <br><br>
 #### Overview
 The function aims to minimize the total travel distance for each truck and effectively deliver all packages assigned to the truck based on the provided constraints.
-<br><br><br><br>
+<br><br>
 #### Algorithm Steps
-> 1. **Initialization:** The function initializes various local variables, such as `en_route` to store packages currently in transit and `status_logs` to store logs of the delivery process.
-> 2. **Package Assignment:** The function assigns the initial set of packages to the truck and sets their status to `en_route`.
-> 3. **Delivery Loop:** The function enters a loop where, at each iteration, it selects the nearest package to the current location and delivers it. The loop continues until all packages are delivered.
->   - For each package in transit, it calculates the distance to the package and selects the package with the minimum distance.
->   - Certain packages have constraints (e.g., package IDs 25, 6) that must be satisfied.
->   - After selecting the next package, the function logs the status, updates the truck's location, time, and miles, and marks the package as delivered.
->   - The process is repeated until there are no more packages in `en_route`.
-> 4. **Return to Hub:** After delivering all packages, the truck returns to the hub. The distance to return is added to the total miles, and the return status is logged.
-> 5. **Status Logs:** The function returns the `status_logs` representing the delivery process of the truck.
+ 1. **Initialization:** The function initializes various local variables, such as `en_route` to store packages currently in transit and `status_logs` to store logs of the delivery process.
+ 2. **Package Assignment:** The function assigns the initial set of packages to the truck and sets their status to `en_route`.
+ 3. **Delivery Loop:** The function enters a loop where, at each iteration, it selects the nearest package to the current location and delivers it. The loop continues until all packages are delivered.
+   - For each package in transit, it calculates the distance to the package and selects the package with the minimum distance.
+   - Certain packages have constraints (e.g., package IDs 25, 6) that must be satisfied.
+   - After selecting the next package, the function logs the status, updates the truck's location, time, and miles, and marks the package as delivered.
+   - The process is repeated until there are no more packages in `en_route`.
+ 4. **Return to Hub:** After delivering all packages, the truck returns to the hub. The distance to return is added to the total miles, and the return status is logged.
+ 5. **Status Logs:** The function returns the `status_logs` representing the delivery process of the truck.
 
 <br><br><br><br>
 #### Pseudocode:
@@ -126,18 +126,18 @@ def truckDeliverPackages(truck, truck_num):
     
     return status_logs  # return the status logs of the delivery process
 ```
-<br><br><br><br>
+<br><br>
 ### Implementation Details
 - The function makes use of helper functions like `addresss` and `Betweenst` to get address indices and calculate distances between addresses, respectively.
 - It utilizes the `datetime.timedelta` class to manage and update the time efficiently during the delivery process.
 - The function carefully handles the status of each package at different times and logs each status change, including stops, deliveries, and returns.
 - Special considerations and constraints are applied for specific package IDs (e.g., package IDs 25, 6).
-<br><br><br><br>
+<br><br>
 ### Visualization
 Prepares a visual representation (a table) of the algorithm's progress using the Rich Library.
-<br><br><br><br>
+<br><br>
 ### Time Complexity
 O(n^2) due to the nested loops where the algorithm iterates over the packages in transit for each delivery.
-<br><br><br><br>
+<br><br>
 ### Example
 If the truck is at location A, and there are packages to be delivered at locations B, C, and D, the function will calculate the distance from A to B, A to C, and A to D, and select the location with the minimum distance.
