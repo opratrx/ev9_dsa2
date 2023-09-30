@@ -78,6 +78,12 @@ This class represents a package with various attributes such as ID, street, city
 - `__str__(self)`: Returns a string representation of the package object.
 - `statusUpdate(self, timeChange)`: Updates the status of the package based on the given time change.
 <br><br><br><br>
+### Trucks Class
+This class represents a truck with attributes such as speed, miles, currentLocation, departTime, and packages.
+<br><br>
+#### Methods
+- `__init__(self, speed, miles, currentLocation, departTime, packages)`: Initializes a truck object with the given attributes.
+<br><br><br><br>
 ### Functions
 - `loadPackageData(filename)`: Loads package data from a CSV file and inserts it into the packageHash hash table.
 - `addresss(address)`: Searches for an address in the addressCSV list and returns the corresponding address ID.
@@ -89,12 +95,7 @@ This class represents a package with various attributes such as ID, street, city
 - `log_truck_metrics_with_date(truck, truck_num)`: Generates a string with the metrics of a truck.
 - `print_total_metrics(total_distance, total_time_corrected, total_packages_delivered)`: Creates and prints a table with the total metrics of all trucks.
 - `main()`: The main entry point of the program.
-<br><br><br><br>
-### Trucks Class
-This class represents a truck with attributes such as speed, miles, currentLocation, departTime, and packages.
-<br><br>
-#### Methods
-- `__init__(self, speed, miles, currentLocation, departTime, packages)`: Initializes a truck object with the given attributes.
+
 
 <br><br>
 
