@@ -28,6 +28,10 @@ The supervisor (user) needs the means to check the status of any given package a
 > 
 > #### 9/29/23 - Added Input Validation, View Package by Parameter, and Improved CLI for UI / UX.
 >- Implemented input validation throughout each step of the program. Implemented the view by package parameter feature: to view individual parameters of each package ID. Added more table styling to the new feature. For an overall improved user experience and program functionality. All program requirements / specifications are met.
+>
+> 
+> #### 9/30/23 - Added Documentation
+>- Added documentation for each class and method in the program including the ReadMe Documentation.
 
 ## Documentation
 
