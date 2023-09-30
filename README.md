@@ -1,6 +1,5 @@
 # <span style="color:orange;">C950 - WGUPS Delivery Tracking System &nbsp; ![Header](https://img.shields.io/badge/-Project-ff6600)
 <br><br>
-![Alt Text](https://github.com/opratrx/opratrx/blob/master/DSA2.gif?raw=true)
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `General Project Information`
 
@@ -15,6 +14,7 @@ The aim is to write efficient code that presents a solution for delivering all 4
 ## User Interface
 A user-friendly interface has been developed and improved over several iterations to present the package delivery process in a clean and organized manner.
 
+![Alt Text](https://github.com/opratrx/opratrx/blob/master/DSA2.gif?raw=true)
 
 <br><br><br><br>
 
