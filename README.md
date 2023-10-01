@@ -62,7 +62,8 @@ A user-friendly interface has been developed and improved utilizing the Rich lib
 
 ###### 10/01/23 - Fixed Input Validation for Package Lookup
 > [!NOTE]
-> Fixed input validation for the package lookup feature. 
+> Fixed input validation for the package lookup feature.
+
 <br><br><br><br>
 # Documentation
 ![#FFA500](https://via.placeholder.com/15/FFA500/000000?text=+) `Project Documentation`
