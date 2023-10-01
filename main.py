@@ -720,10 +720,8 @@ def main():
                 # User inputs time
                 user_time = input(
                     BOLDORANGE + "\nPlease input the time in 24-hour [HH:MM] format you wish to view the package statuses for, e.g., enter 14:30 for 2:30 PM:" + RESET + "\n> ")
-
                 # Split the entered time by ":"
                 time_parts = user_time.split(":")
-
                 # Check if the entered time is in correct format and after 08:00
                 if len(time_parts) == 2 and time_parts[0].isdigit() and time_parts[1].isdigit():
                     h, m = map(int, time_parts)
@@ -734,36 +732,44 @@ def main():
                         console.print("[red]Invalid time! Please enter a time after 08:00.[/red]")
                 else:
                     console.print("[red]Invalid format! Please enter time in HH:MM format.[/red]")
-            try:
-                package_id = input(
-                    BOLDORANGE + "\n\nPlease enter the package ID you wish to view, or press Enter to view all packages:" + RESET + "\n> ")
-                if package_id:
-                    packages_to_view = [packageHash.search(int(package_id))]
-                    # User selects parameter to view since a specific package ID is entered
+            while True:
+                try:
+                    package_id = input(
+                        BOLDORANGE + "\n\nPlease enter the package ID you wish to view, or press Enter to view all packages:" + RESET + "\n> ")
+                    if package_id:  # if the user didn't press Enter
+                        package_id = int(
+                            package_id)  # try to convert to integer. This will raise ValueError if it fails.
+                        if package_id < 1 or package_id > 40:  # assuming package_id should be positive.
+                            raise ValueError("Package ID must be a positive number.")
+                        packages_to_view = [packageHash.search(package_id)]
+                        break  # if conversion to integer succeeded, exit the loop
+                    else:
+                        packages_to_view = [packageHash.search(i) for i in range(1, 41)]  # Assuming 40 packages
+                        break  # if the user pressed Enter, exit the loop
+                except ValueError as e:
+                    # Display error message to user and continue the loop
+                    console.print(
+                        f"[red]Invalid input! {str(e)} Please enter a valid package ID or press Enter for all packages.[/red]")
+            if package_id:
+                while True:
                     param_choice = input(BOLDORANGE + "\n\nSelect the parameter you want to view:\n" + RESET +
                                          "\ta - Address\n\tb - City\n\tc - Zip Code\n\td - State\n\te - Deadline\n\tf - Weight\n\tg - Status\n\th - All\n> ").lower()
                     param_dict = {'a': 'street', 'b': 'city', 'c': 'zip', 'd': 'state', 'e': 'deadline', 'f': 'weight',
                                   'g': 'status', 'h': 'all'}
                     if param_choice not in param_dict:
                         console.print("[red]Invalid choice! Please select a valid option.[/red]")
-                        continue
-                    # Display selected parameter for the entered package ID
-                    package = packages_to_view[0]
-                    package.statusUpdate(time_change)
-                    create_and_print_parameter_table(package, param_choice)
-                else:
-                    # Display all parameters using create_and_print_package_table for all packages
-                    for i in range(1, 41):  # Assuming 40 packages
-                        package = packageHash.search(i)
+                    else:
+                        # Display selected parameter for the entered package ID
+                        package = packages_to_view[0]
                         package.statusUpdate(time_change)
-                        create_and_print_package_table(package)
-            except ValueError:
-                console.print(
-                    "\n[red]Invalid input! Please enter a valid package ID or press Enter for all packages.[/red]")
-                continue
-        else:
-            console.print("\n[yellow]Invalid input! Please enter a valid choice.[/yellow]")
-            continue
+                        create_and_print_parameter_table(package, param_choice)
+                        break
+            else:
+                # Display all parameters using create_and_print_package_table for all packages
+                for package in packages_to_view:
+                    package.statusUpdate(time_change)
+                    create_and_print_package_table(package)
+
 
 
 if __name__ == "__main__":
