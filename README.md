@@ -30,36 +30,39 @@ A user-friendly interface has been developed and improved utilizing the Rich lib
 > [!NOTE]
 > Uploading the current structure of the main components to the software. This commit is the basic functionality of the program before implementing anything further such as the user interface. For the moment, this is a basic layout and foundational draft.
 > 
-&nbsp;
+
 ###### 9/28/23 - Implemented a Working User Interface
 
 > [!NOTE]
 > Implemented a working user interface and will be incorporating a better design in the next few updates. For the time being, this will serve as the first draft of the user interface.
 > 
-&nbsp;
+
 ###### 9/28/23 - Improved User Interface Using the Textualize Rich Library
 
 > [!NOTE]
 > Improving the look and feel of the user interface using the Rich library to oraganize the package delivery process into a data table.
 > 
-&nbsp;
+
 ###### 9/28/23 - Improved CLI and Added Algorithm Analysis + Status Checks for Each Process in the Algorithm.
 
 > [!NOTE]
 > Improving the CLI and added a status check for each step in the process of the Greedy / Nearest Neighbor Algorithm for Analysis.
 > 
-&nbsp;
+
 ###### 9/29/23 - Added Input Validation, View Package by Parameter, and Improved CLI for UI / UX.
 
 > [!NOTE]
 > Implemented input validation throughout each step of the program. Implemented the view by package parameter feature: to view individual parameters of each package ID. Added more table styling to the new feature. For an overall improved user experience and program functionality. All program requirements / specifications are met.
 >
-&nbsp;
+
 ###### 9/30/23 - Added Documentation
 
 > [!NOTE]
 > Added documentation for each class and method in the program including the ReadMe Documentation.
 
+###### 10/01/23 - Fixed Input Validation for Package Lookup
+> [!NOTE]
+> Fixed input validation for the package lookup feature. 
 <br><br><br><br>
 # Documentation
 ![#FFA500](https://via.placeholder.com/15/FFA500/000000?text=+) `Project Documentation`
